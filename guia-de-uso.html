@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia de Uso Minas Cabelos</title>
+<meta name="description" content="Guia de uso da skill de identidade da Minas Cabelos. Manual de marca da Minas Cabelos (Três Corações, MG), sistema Cartela Mineira v1: marca, cartela de cores, tipografia e a palavra à mão, leis da casa, voz, regras de anúncio e consumo, fotografia de cabelo, formas, componentes e aplicações em Instagram, WhatsApp, catálogo, loja, embalagem e site.">
+<meta name="theme-color" content="#28170C">
+<meta property="og:title" content="Brand Book Minas Cabelos">
+<meta property="og:description" content="O sistema Cartela Mineira v1: como a Minas Cabelos aparece em cada peça.">
+<meta property="og:image" content="assets/minas-cabelos-compartilhamento-1200x630.png">
+<link rel="icon" type="image/svg+xml" href="assets/minas-cabelos-favicon.svg">
+<link rel="icon" type="image/png" href="assets/minas-cabelos-favicon-512.png">
+<link rel="apple-touch-icon" href="assets/minas-cabelos-favicon-180.png">
+<link rel="stylesheet" href="assets/fontes/fontes.css">
+<script>
+/* Entrada discreta: a classe js só existe com JavaScript. Sem ela, tudo aparece inteiro.
+   Rede de segurança: tudo visível em 2,6 s, mesmo se o observador falhar. */
+document.documentElement.classList.add('js');
+setTimeout(function(){document.querySelectorAll('.reveal').forEach(function(e){e.classList.add('in');});},2600);
+</script>
+<style>
+/* =====================================================================
+   CARTELA MINEIRA v1 · sistema de identidade da Minas Cabelos
+   Base do brand book. Ordem: tokens, campos, reset, tipografia, layout,
+   motivos da casa, componentes de documento, marca, mockups de peça,
+   capa, rodapé, Mobile System v1, impressão.
+   Regras: uma única tag de estilo por arquivo; só as cores do :root;
+   superfície chapada (sem vidro, brilho ou sombra decorativa);
+   CSS extra de seção vai prefixado (#s-NN .cNN-...).
+   Recursos de assinatura: a CARTELA (as cinco faixas de tom na borda),
+   a MECHA (a onda dourada do logotipo) e a PALAVRA À MÃO (uma palavra
+   por título em Alex Brush, como o "Cabelos" da marca).
+   ===================================================================== */
+
+/* ---------- 1. Tokens ---------- */
+:root{
+  color-scheme: light;
+
+  /* Da marca, medidos nos arquivos publicados (site 2023 e Instagram 2026) */
+  --cafe:#28170C;         /* Café: fundo das peças do Instagram (medido) */
+  --cafe-marca:#33150A;   /* Café Minas: a cor das letras do logotipo marrom (medido) */
+  --ouro:#F0B800;         /* Ouro Minas: o A e a mecha do logotipo (medido) */
+  /* A cartela: as cinco faixas do avatar e dos posts (medidas, de cima para baixo) */
+  --mel:#DD9A37;
+  --dourado:#E9B43E;
+  --mata:#8B9D30;
+  --cobre:#E85529;
+  --vinho:#80170F;
+  --creme:#F1E4D1;        /* Creme: o cartão de informação dos posts (medido) */
+
+  /* Extensões do sistema */
+  --torra:#1B0F07;        /* rodapé, fundo mais profundo */
+  --painel:#3A2316;       /* painel sobre Café */
+  --leite:#FBF6EE;        /* campo de leitura */
+  --areia:#E6D5BC;        /* linha e painel no claro */
+  --branco:#FFFFFF;
+  --canela:#C9A98A;       /* apoio sobre Café (7,8:1) */
+  --tabaco:#6B4A36;       /* apoio sobre Leite (7,3:1) */
+  --bronze:#8A5A00;       /* o dourado quando precisa ser texto no claro (5,5:1) */
+  --linha-clara:#E6D5BC;
+  --linha-escura:#4A3122;
+  --erro:#B42318;
+  --ok:#3F6B1E;
+
+  --cartela:linear-gradient(180deg,var(--mel) 0 20%,var(--dourado) 20% 40%,var(--mata) 40% 60%,var(--cobre) 60% 80%,var(--vinho) 80% 100%);
+  --cartela-h:linear-gradient(90deg,var(--mel) 0 20%,var(--dourado) 20% 40%,var(--mata) 40% 60%,var(--cobre) 60% 80%,var(--vinho) 80% 100%);
+
+  /* Fontes */
+  --f-titulo:'Montserrat',Arial,sans-serif;
+  --f-texto:'Nunito Sans',Arial,sans-serif;
+  --f-mao:'Alex Brush',cursive;
+
+  /* Escala do documento */
+  --t-display:clamp(48px,7.4vw,104px);
+  --t-h2:clamp(34px,4.6vw,58px);
+  --t-h3:clamp(24px,2.6vw,34px);
+  --t-h4:clamp(20px,1.9vw,24px);
+  --t-chamada:clamp(18px,1.6vw,21px);
+  --t-corpo:17px;
+  --t-apoio:15px;
+  --t-legenda:13px;
+  --t-rotulo:12px;
+
+  /* Espaço (escala de 4) */
+  --e1:4px;--e2:8px;--e3:12px;--e4:16px;--e5:24px;--e6:32px;--e7:48px;--e8:64px;--e9:96px;--e10:128px;
+  --lado:48px;
+  --raio:6px;
+  --raio-g:14px;
+  --larg:1200px;
+  --leitura:680px;
+  --cartela-borda:10px;
+}
+
+/* ---------- 2. Campos ----------
+   Cada campo redefine as variáveis de texto, e todo componente lê só elas. */
+.campo-leite,.sec--leite{
+  --dado-destaque:var(--vinho);--dado-1:#B08A6E;--dado-2:var(--tabaco);--dado-3:#D9C3A4;--dado-4:var(--areia);
+  --f-fundo:var(--leite);--f-titulo-c:var(--cafe-marca);--f-texto-c:var(--cafe-marca);--f-apoio:var(--tabaco);
+  --f-linha:var(--linha-clara);--f-destaque:var(--vinho);--f-mao-c:var(--vinho);--f-painel:var(--branco);
+  --f-btn-bg:var(--cafe);--f-btn-fg:var(--branco);--f-link:var(--vinho);
+  background:var(--leite);color:var(--cafe-marca);
+}
+.campo-creme,.sec--creme{
+  --dado-destaque:var(--vinho);--dado-1:#B08A6E;--dado-2:var(--tabaco);--dado-3:#D9C3A4;--dado-4:var(--areia);
+  --f-fundo:var(--creme);--f-titulo-c:var(--cafe-marca);--f-texto-c:var(--cafe-marca);--f-apoio:var(--tabaco);
+  --f-linha:#D9C3A4;--f-destaque:var(--vinho);--f-mao-c:var(--vinho);--f-painel:var(--leite);
+  --f-btn-bg:var(--cafe);--f-btn-fg:var(--branco);--f-link:var(--vinho);
+  background:var(--creme);color:var(--cafe-marca);
+}
+.campo-branco{
+  --dado-destaque:var(--vinho);--dado-1:#B08A6E;--dado-2:var(--tabaco);--dado-3:#D9C3A4;--dado-4:var(--areia);
+  --f-fundo:var(--branco);--f-titulo-c:var(--cafe-marca);--f-texto-c:var(--cafe-marca);--f-apoio:var(--tabaco);
+  --f-linha:var(--linha-clara);--f-destaque:var(--vinho);--f-mao-c:var(--vinho);--f-painel:var(--leite);
+  --f-btn-bg:var(--cafe);--f-btn-fg:var(--branco);--f-link:var(--vinho);
+  background:var(--branco);color:var(--cafe-marca);
+}
+.campo-cafe,.sec--cafe{
+  --dado-destaque:var(--ouro);--dado-1:var(--dourado);--dado-2:var(--canela);--dado-3:var(--tabaco);--dado-4:var(--linha-escura);
+  --f-fundo:var(--cafe);--f-titulo-c:var(--branco);--f-texto-c:var(--creme);--f-apoio:var(--canela);
+  --f-linha:var(--linha-escura);--f-destaque:var(--ouro);--f-mao-c:var(--ouro);--f-painel:var(--painel);
+  --f-btn-bg:var(--ouro);--f-btn-fg:var(--cafe);--f-link:var(--ouro);
+  background:var(--cafe);color:var(--creme);
+}
+.campo-painel{
+  --dado-destaque:var(--ouro);--dado-1:var(--dourado);--dado-2:var(--canela);--dado-3:var(--tabaco);--dado-4:var(--linha-escura);
+  --f-fundo:var(--painel);--f-titulo-c:var(--branco);--f-texto-c:var(--creme);--f-apoio:var(--canela);
+  --f-linha:#5A3D2A;--f-destaque:var(--ouro);--f-mao-c:var(--ouro);--f-painel:var(--cafe);
+  --f-btn-bg:var(--ouro);--f-btn-fg:var(--cafe);--f-link:var(--ouro);
+  background:var(--painel);color:var(--creme);
+}
+.campo-torra{
+  --dado-destaque:var(--ouro);--dado-1:var(--dourado);--dado-2:var(--canela);--dado-3:var(--tabaco);--dado-4:var(--linha-escura);
+  --f-fundo:var(--torra);--f-titulo-c:var(--branco);--f-texto-c:var(--creme);--f-apoio:var(--canela);
+  --f-linha:#3A2618;--f-destaque:var(--ouro);--f-mao-c:var(--ouro);--f-painel:var(--cafe);
+  --f-btn-bg:var(--ouro);--f-btn-fg:var(--cafe);--f-link:var(--ouro);
+  background:var(--torra);color:var(--creme);
+}
+.campo-vinho{
+  --dado-destaque:var(--ouro);--dado-1:var(--dourado);--dado-2:var(--canela);--dado-3:var(--tabaco);--dado-4:var(--linha-escura);
+  --f-fundo:var(--vinho);--f-titulo-c:var(--branco);--f-texto-c:var(--branco);--f-apoio:var(--creme);
+  --f-linha:#A1352B;--f-destaque:var(--ouro);--f-mao-c:var(--ouro);--f-painel:#6B120B;
+  --f-btn-bg:var(--ouro);--f-btn-fg:var(--cafe);--f-link:var(--ouro);
+  background:var(--vinho);color:var(--branco);
+}
+
+/* ---------- 3. Reset ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:24px}
+body{margin:0;background:var(--leite);color:var(--cafe-marca);font-family:var(--f-texto);font-size:var(--t-corpo);line-height:1.68;
+  font-variant-numeric:lining-nums;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img,svg,video{max-width:100%;height:auto;display:block}
+a{color:var(--f-link,var(--vinho));text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--ouro);outline-offset:3px;border-radius:2px}
+p,li,td,th,dd,figcaption{overflow-wrap:break-word}
+button{font:inherit;cursor:pointer}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.pular{position:absolute;left:-9999px;top:8px;z-index:20;background:var(--ouro);color:var(--cafe);padding:12px 16px;font-weight:700;border-radius:var(--raio)}
+.pular:focus{left:24px}
+
+/* A cartela na borda esquerda da página: a assinatura do sistema */
+body::before{content:"";position:fixed;left:0;top:0;bottom:0;width:var(--cartela-borda);background:var(--cartela);z-index:30;pointer-events:none}
+
+/* ---------- 4. Tipografia ---------- */
+h1,h2,h3,h4{font-family:var(--f-titulo);color:var(--f-titulo-c,var(--cafe-marca));margin:0;font-weight:800;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:var(--t-display);line-height:1.02;letter-spacing:-.025em}
+h2{font-size:var(--t-h2);line-height:1.06;letter-spacing:-.02em}
+h3{font-size:var(--t-h3);line-height:1.15;font-weight:700}
+h4{font-size:var(--t-h4);line-height:1.25;font-weight:700}
+p{margin:0 0 1em}
+p:last-child{margin-bottom:0}
+strong{font-weight:700;color:var(--f-titulo-c,inherit)}
+/* A PALAVRA À MÃO: <em> no título vira Alex Brush, maior, na cor de destaque do campo */
+h1 em,h2 em,h3 em,.pc-titulo em,.mao{font-family:var(--f-mao);font-style:normal;font-weight:400;color:var(--f-mao-c,var(--vinho));
+  font-size:1.32em;line-height:.8;letter-spacing:0;text-transform:none;padding:0 .04em;display:inline-block;transform:translateY(.04em)}
+h3 em{font-size:1.28em}
+.rotulo{font-family:var(--f-titulo);font-size:var(--t-rotulo);font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--f-apoio,var(--tabaco));display:inline-block}
+.rotulo--destaque{color:var(--f-destaque,var(--vinho))}
+.chamada{font-size:var(--t-chamada);line-height:1.55;color:var(--f-texto-c);max-width:var(--leitura)}
+.apoio{font-size:var(--t-apoio);color:var(--f-apoio)}
+.legenda,figcaption{font-size:var(--t-legenda);line-height:1.5;color:var(--f-apoio)}
+.olho{font-family:var(--f-titulo);font-weight:600;font-size:clamp(22px,2.4vw,30px);line-height:1.35;color:var(--f-titulo-c);margin:var(--e6) 0;padding-left:var(--e5);border-left:4px solid var(--f-destaque)}
+.olho cite{display:block;margin-top:var(--e3);font:400 var(--t-apoio)/1.4 var(--f-texto);font-style:normal;color:var(--f-apoio)}
+code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:color-mix(in srgb,var(--f-linha) 55%,transparent);padding:.08em .38em;border-radius:4px;overflow-wrap:anywhere}
+ul.lista,ol.lista{padding-left:1.2em;margin:0 0 1em}
+ul.lista li,ol.lista li{margin:.35em 0}
+ul.lista li::marker{color:var(--f-destaque)}
+ol.lista li::marker{color:var(--f-destaque);font-family:var(--f-titulo);font-weight:800}
+
+/* ---------- 5. Layout ---------- */
+.wrap{max-width:var(--larg);margin:0 auto;padding:0 var(--lado) 0 calc(var(--lado) + var(--cartela-borda))}
+.leitura{max-width:var(--leitura)}
+.sec{padding:var(--e10) 0;position:relative}
+.sec-head{display:grid;grid-template-columns:120px 1fr;gap:var(--e5);align-items:start;margin-bottom:var(--e8)}
+.folio{font-family:var(--f-titulo);font-weight:800;font-size:clamp(56px,7vw,96px);line-height:.85;color:var(--f-destaque);letter-spacing:-.04em}
+.folio small{display:block;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--f-apoio);margin-top:var(--e3);font-weight:700}
+.sec-head .rotulo{margin-bottom:var(--e3)}
+.sec-head h2{max-width:20ch}
+.sec-head .chamada{margin-top:var(--e5)}
+.bloco{margin-top:var(--e9)}
+.bloco:first-of-type{margin-top:0}
+.bloco-head{display:grid;grid-template-columns:120px 1fr;gap:var(--e5);margin-bottom:var(--e6);align-items:baseline}
+.bloco-n{font-family:var(--f-titulo);font-weight:800;font-size:15px;color:var(--f-destaque);letter-spacing:.06em;border-top:3px solid var(--f-destaque);padding-top:var(--e2);display:inline-block}
+.bloco-head h3{margin-bottom:var(--e3)}
+.bloco-apoio{color:var(--f-apoio);max-width:var(--leitura);margin:0}
+.bloco-corpo{margin-left:calc(120px + var(--e5))}
+.cols-2,.cols-3,.cols-4,.cols-7-5,.cols-5-7,.cols-8-4{display:grid;gap:var(--e6)}
+.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.cols-7-5{grid-template-columns:7fr 5fr}
+.cols-5-7{grid-template-columns:5fr 7fr}
+.cols-8-4{grid-template-columns:8fr 4fr}
+.mt-1{margin-top:var(--e4)}.mt-2{margin-top:var(--e6)}.mt-3{margin-top:var(--e7)}.mt-4{margin-top:var(--e8)}
+.faixa{padding:var(--e8) 0;margin:var(--e8) 0}
+.painel{background:var(--f-painel);border-radius:var(--raio-g);padding:var(--e6)}
+.painel--linha{background:transparent;border:1px solid var(--f-linha)}
+
+/* ---------- 6. Motivos da casa ---------- */
+/* A cartela: as cinco faixas de tom. Horizontal (régua) ou vertical (borda de peça). */
+.cartela{display:block;height:8px;background:var(--cartela-h);border-radius:0;width:100%}
+.cartela--curta{width:120px}
+.cartela-v{display:block;width:10px;background:var(--cartela);align-self:stretch}
+.tons{display:flex;gap:0;border-radius:var(--raio);overflow:hidden}
+.tons span{flex:1;height:48px}
+/* A mecha: a onda dourada como divisor (SVG inline com a classe .mecha-svg) */
+.mecha-svg{width:min(360px,70%);height:auto;color:var(--f-destaque,var(--ouro));display:block}
+.mecha-div{display:flex;justify-content:center;margin:var(--e8) 0}
+.pilula{display:inline-flex;align-items:center;gap:6px;font:700 12px/1 var(--f-titulo);letter-spacing:.08em;text-transform:uppercase;
+  padding:8px 12px;border-radius:999px;border:1px solid var(--f-linha);color:var(--f-texto-c);background:transparent}
+.pilula--cheia{background:var(--f-destaque);color:var(--f-fundo);border-color:var(--f-destaque)}
+.pilula .ic{width:14px;height:14px}
+.selo{display:inline-flex;align-items:center;gap:var(--e2);font:700 13px/1.2 var(--f-titulo);color:var(--f-titulo-c)}
+.ic{width:20px;height:20px;flex:none;display:inline-block;vertical-align:middle}
+
+/* ---------- 7. Componentes de documento ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:12px 22px;border-radius:999px;
+  font:700 15px/1.2 var(--f-titulo);letter-spacing:.02em;text-decoration:none;border:2px solid transparent;text-align:center;max-width:100%}
+.btn--cheio{background:var(--f-btn-bg);color:var(--f-btn-fg)}
+.btn--linha{border-color:var(--f-titulo-c);color:var(--f-titulo-c);background:transparent}
+.btn--whats{background:var(--f-btn-bg);color:var(--f-btn-fg)}
+.btn--bloco{display:flex;width:100%}
+.btn .ic{width:18px;height:18px}
+.link-seta{display:inline-flex;align-items:center;gap:6px;font:700 14px/1.3 var(--f-titulo);color:var(--f-link);text-decoration:none}
+.link-seta .ic{width:16px;height:16px}
+
+.nota,.alerta,.certo{border-radius:var(--raio-g);padding:var(--e5) var(--e5) var(--e5) var(--e6);position:relative;margin:var(--e6) 0;max-width:var(--leitura)}
+.nota{background:var(--f-painel);border-left:4px solid var(--f-destaque)}
+.alerta{background:color-mix(in srgb,var(--cobre) 12%,var(--f-fundo));border-left:4px solid var(--cobre)}
+.certo{background:color-mix(in srgb,var(--mata) 14%,var(--f-fundo));border-left:4px solid var(--mata)}
+.nota strong:first-child,.alerta strong:first-child,.certo strong:first-child{display:block;font-family:var(--f-titulo);font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:var(--e2)}
+.nota--larga,.alerta--larga{max-width:none}
+
+/* Assim / Não assim */
+.par{display:grid;grid-template-columns:1fr 1fr;gap:var(--e5)}
+.faca,.nao-faca{border-radius:var(--raio-g);padding:var(--e5);border:1px solid var(--f-linha);background:var(--f-painel)}
+.faca::before,.nao-faca::before{display:flex;align-items:center;gap:8px;font:800 12px/1 var(--f-titulo);letter-spacing:.16em;text-transform:uppercase;margin-bottom:var(--e4)}
+.faca::before{content:"✓  Assim";color:var(--ok)}
+.campo-cafe .faca::before,.sec--cafe .faca::before{color:#B7CC5A}
+.nao-faca::before{content:"✕  Não assim";color:var(--erro)}
+.campo-cafe .nao-faca::before,.sec--cafe .nao-faca::before{color:#FF8A6B}
+.faca p,.nao-faca p{margin:0}
+.nf-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--e5)}
+.nf{margin:0}
+.nf .nf-amostra{aspect-ratio:4/3;border-radius:var(--raio);border:1px solid var(--f-linha);display:grid;place-items:center;overflow:hidden;position:relative;background:var(--f-painel)}
+.nf .nf-amostra::after{content:"";position:absolute;inset:0;background:linear-gradient(to top right,transparent calc(50% - 1.5px),var(--erro) calc(50% - 1.5px) calc(50% + 1.5px),transparent calc(50% + 1.5px));opacity:.85}
+.nf figcaption{margin-top:var(--e2)}
+
+/* Fichas de cor */
+.cores{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--e5)}
+.cor{border-radius:var(--raio-g);overflow:hidden;border:1px solid var(--f-linha);background:var(--f-painel);margin:0}
+.cor-amostra{height:132px;display:flex;align-items:flex-end;padding:var(--e4);font:800 13px/1 var(--f-titulo);letter-spacing:.1em;text-transform:uppercase}
+.cor-dados{padding:var(--e4)}
+.cor-dados h4{font-size:18px;margin-bottom:4px}
+.cor-dados dl{margin:var(--e2) 0 0;display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:13px}
+.cor-dados dt{color:var(--f-apoio)}
+.cor-dados dd{margin:0;font-family:ui-monospace,Menlo,monospace;font-size:12.5px}
+.cor-uso{font-size:14px;margin-top:var(--e3);color:var(--f-texto-c)}
+.leituras{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:var(--e3)}
+.leitura-par{border-radius:var(--raio);padding:var(--e4);font:700 15px/1.3 var(--f-titulo);border:1px solid var(--f-linha)}
+.leitura-par small{display:block;font:400 12px/1.4 var(--f-texto);margin-top:6px;opacity:.9}
+
+/* Tabelas */
+.table-wrap{margin:var(--e6) 0;max-width:100%}
+table.consulta{width:100%;border-collapse:collapse;font-size:15px;line-height:1.5}
+table.consulta caption{text-align:left;font:700 13px/1.4 var(--f-titulo);letter-spacing:.12em;text-transform:uppercase;color:var(--f-apoio);padding-bottom:var(--e3)}
+table.consulta th,table.consulta td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--f-linha)}
+table.consulta thead th{font:700 12px/1.3 var(--f-titulo);letter-spacing:.12em;text-transform:uppercase;color:var(--f-apoio);background:var(--f-painel);border-bottom:2px solid var(--f-destaque)}
+table.consulta tbody th,table.consulta tbody td:first-child{font-weight:700;color:var(--f-titulo-c);min-width:8.5em;overflow-wrap:normal;hyphens:manual}
+table.consulta td code{white-space:nowrap}
+.table-wrap.matriz{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--f-linha);border-radius:var(--raio)}
+.table-wrap.matriz table{min-width:760px}
+.matriz-dica{font-size:13px;color:var(--f-apoio);display:none;align-items:center;gap:6px;margin:var(--e4) 0 calc(-1 * var(--e4))}
+.matriz-dica .ic{width:16px;height:16px}
+
+/* Números */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--e5)}
+.kpi{border-top:3px solid var(--f-destaque);padding-top:var(--e4)}
+.kpi b{display:block;font:800 clamp(36px,4vw,52px)/1 var(--f-titulo);color:var(--f-titulo-c);letter-spacing:-.02em}
+.kpi span{display:block;margin-top:var(--e2);font-size:14px;color:var(--f-apoio)}
+
+/* Checklist */
+.checklist{display:grid;gap:var(--e2);max-width:860px}
+.check-row{display:grid;grid-template-columns:28px 1fr;gap:var(--e3);align-items:start;padding:var(--e3) var(--e4);border:1px solid var(--f-linha);border-radius:var(--raio);background:var(--f-painel)}
+.check-row input{width:20px;height:20px;margin:3px 0 0;accent-color:var(--vinho)}
+.campo-cafe .check-row input,.sec--cafe .check-row input{accent-color:var(--ouro)}
+.check-row label{cursor:pointer}
+
+/* Figuras e fotos */
+.foto{margin:0}
+.foto img{width:100%;border-radius:var(--raio-g);object-fit:cover}
+.foto figcaption{margin-top:var(--e3)}
+.foto--moldura img{border:1px solid var(--f-linha);padding:10px;background:var(--f-painel)}
+.foto-referencia{margin:0}
+.foto-referencia img{border-radius:var(--raio);border:1px solid var(--f-linha)}
+
+/* Marca no documento */
+.marca-palco{border-radius:var(--raio-g);padding:clamp(24px,5vw,64px);display:grid;place-items:center;min-height:220px;border:1px solid var(--f-linha);position:relative;overflow:hidden}
+.marca-palco img{max-height:180px;width:auto;max-width:100%}
+.marca-palco--cartela{padding-left:calc(clamp(24px,5vw,64px) + 14px)}
+.marca-palco--cartela::before{content:"";position:absolute;left:0;top:0;bottom:0;width:14px;background:var(--cartela)}
+.marca-ficha{margin:0}
+.marca-ficha figcaption{margin-top:var(--e3)}
+.marca-ficha figcaption b{display:block;font:700 15px/1.3 var(--f-titulo);color:var(--f-titulo-c);margin-bottom:2px}
+.selo-reconstrucao{display:inline-flex;gap:8px;align-items:center;font:700 11px/1.2 var(--f-titulo);letter-spacing:.14em;text-transform:uppercase;padding:6px 10px;border-radius:4px;border:1px dashed var(--f-destaque);color:var(--f-destaque)}
+
+/* Gráficos e formas (motores mcviz e mcforms) */
+.grafico,.forma{margin:0;border:1px solid var(--f-linha);border-radius:var(--raio-g);padding:var(--e5);background:var(--f-painel)}
+.grafico-titulo{font:700 19px/1.3 var(--f-titulo);color:var(--f-titulo-c);margin:var(--e2) 0 var(--e4)}
+.grafico-svg,.forma-svg{width:100%;min-height:120px}
+.grafico .legenda,.forma .legenda{margin-top:var(--e3)}
+
+/* Modelo de texto copiável */
+.modelo{border:1px solid var(--f-linha);border-radius:var(--raio-g);background:var(--f-painel);padding:var(--e5);position:relative}
+.modelo-texto{white-space:pre-wrap;font-size:15px;line-height:1.6;margin:0;font-family:var(--f-texto)}
+.copiar{position:absolute;top:12px;right:12px;min-height:36px;padding:6px 12px;border-radius:999px;border:1px solid var(--f-linha);background:var(--f-fundo);color:var(--f-texto-c);font:700 12px/1 var(--f-titulo)}
+
+/* Ficha de produto (o jeito Minas de apresentar um cabelo) */
+.ficha{border-radius:var(--raio-g);overflow:hidden;background:var(--f-painel);border:1px solid var(--f-linha);display:grid;grid-template-columns:10px 1fr}
+.ficha::before{content:"";background:var(--cartela)}
+.ficha-corpo{padding:var(--e5)}
+.ficha-tipo{font:700 11px/1 var(--f-titulo);letter-spacing:.18em;text-transform:uppercase;color:var(--f-destaque)}
+.ficha h4{margin:6px 0 var(--e3)}
+.ficha dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-size:15px}
+.ficha dt{color:var(--f-apoio)}
+.ficha dd{margin:0;font-weight:700;color:var(--f-titulo-c)}
+.ficha-preco{margin-top:var(--e4);font:800 26px/1 var(--f-titulo);color:var(--f-titulo-c)}
+.ficha-preco small{display:block;font:400 13px/1.4 var(--f-texto);color:var(--f-apoio);margin-top:6px}
+
+/* ---------- 8. Mockups de peça ----------
+   .mock é o contêiner (mede a largura); .peca é a arte em proporção real.
+   Dentro da peça, a unidade --u vale 1 px da arte de 1080: tudo se mede em calc(N*var(--u)). */
+.mock-quadro{margin:0}
+.mock-quadro figcaption{margin-top:var(--e3);display:flex;gap:var(--e3);flex-wrap:wrap;align-items:center}
+.mock{container-type:inline-size;width:100%;--base:1080}
+.peca{--u:calc(100cqw / 1080);width:100%;position:relative;overflow:hidden;font-family:var(--f-texto);border-radius:calc(10*var(--u));
+  box-shadow:0 0 0 1px var(--f-linha)}
+.mock--post .peca{aspect-ratio:1080/1350}
+.mock--quadrado .peca{aspect-ratio:1/1}
+.mock--story .peca{aspect-ratio:1080/1920}
+.mock--paisagem .peca{aspect-ratio:1200/630}
+.mock--a4 .peca{aspect-ratio:210/297}
+.mock--cartao .peca{aspect-ratio:90/50}
+.mock--etiqueta .peca{aspect-ratio:2/3}
+.mock--story,.mock--whats{max-width:420px}
+.mock--post{max-width:560px}
+.mock--quadrado{max-width:560px}
+/* A cartela da peça: faixa vertical na borda esquerda, 56 u */
+.pc-cartela{position:absolute;left:0;top:0;bottom:0;width:calc(56*var(--u));background:var(--cartela)}
+.pc-cartela--fina{width:calc(28*var(--u))}
+.pc-cartela--topo{right:0;bottom:auto;width:auto;height:calc(24*var(--u));background:var(--cartela-h)}
+.pc-area{position:absolute;inset:calc(72*var(--u)) calc(72*var(--u)) calc(72*var(--u)) calc(128*var(--u));display:flex;flex-direction:column}
+.pc-area--segura{top:calc(250*var(--u));bottom:calc(250*var(--u))}
+.pc-marca{width:calc(420*var(--u));height:auto}
+.pc-marca--grande{width:calc(620*var(--u))}
+.pc-marca--rodape{width:calc(300*var(--u))}
+.pc-simbolo{width:calc(110*var(--u))}
+.pc-rotulo{font:700 calc(26*var(--u))/1.2 var(--f-titulo);letter-spacing:.16em;text-transform:uppercase;color:var(--f-destaque)}
+.pc-titulo{font:800 calc(92*var(--u))/1.02 var(--f-titulo);letter-spacing:-.02em;color:var(--f-titulo-c);text-transform:uppercase;margin:0;text-wrap:balance}
+.pc-titulo--normal{text-transform:none}
+.pc-titulo em{font-size:1.35em;line-height:.75}
+.pc-sub{font:700 calc(48*var(--u))/1.15 var(--f-titulo);color:var(--f-titulo-c);margin:0}
+.pc-corpo{font:400 calc(34*var(--u))/1.42 var(--f-texto);color:var(--f-texto-c);margin:0}
+.pc-corpo b{font-weight:700;color:var(--f-titulo-c)}
+.pc-mini{font:400 calc(26*var(--u))/1.35 var(--f-texto);color:var(--f-apoio);margin:0}
+.pc-btn{display:inline-flex;align-items:center;justify-content:center;gap:calc(14*var(--u));align-self:flex-start;background:var(--f-btn-bg);color:var(--f-btn-fg);
+  font:800 calc(34*var(--u))/1 var(--f-titulo);letter-spacing:.03em;text-transform:uppercase;padding:calc(26*var(--u)) calc(44*var(--u));border-radius:999px}
+.pc-btn svg{width:calc(36*var(--u));height:calc(36*var(--u))}
+.pc-preco{font:800 calc(64*var(--u))/1 var(--f-titulo);color:var(--f-titulo-c)}
+.pc-preco small{font:400 calc(26*var(--u))/1.3 var(--f-texto);color:var(--f-apoio);display:block;margin-top:calc(10*var(--u))}
+.pc-pilula{display:inline-flex;align-items:center;gap:calc(10*var(--u));border:calc(2*var(--u)) solid var(--f-destaque);color:var(--f-titulo-c);
+  font:700 calc(26*var(--u))/1 var(--f-titulo);letter-spacing:.06em;text-transform:uppercase;padding:calc(14*var(--u)) calc(22*var(--u));border-radius:999px}
+.pc-dados{display:grid;grid-template-columns:auto 1fr;gap:calc(8*var(--u)) calc(28*var(--u));font:400 calc(30*var(--u))/1.35 var(--f-texto);color:var(--f-texto-c)}
+.pc-dados dt{color:var(--f-apoio)}
+.pc-dados dd{margin:0;font-weight:700;color:var(--f-titulo-c)}
+.pc-num{font:800 calc(150*var(--u))/.9 var(--f-titulo);color:var(--f-destaque);letter-spacing:-.04em}
+.pc-mecha{width:calc(420*var(--u));color:var(--f-destaque)}
+.pc-foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pc-sombra{position:absolute;inset:0;background:linear-gradient(to top,rgba(27,15,7,.92) 0%,rgba(27,15,7,.55) 38%,rgba(27,15,7,0) 64%)}
+.pc-espaco{flex:1}
+.pc-rodape{display:flex;justify-content:space-between;align-items:flex-end;gap:calc(24*var(--u))}
+.pc-id{font:400 calc(26*var(--u))/1.35 var(--f-texto);color:var(--f-apoio)}
+.pc-num-lamina{font:700 calc(26*var(--u))/1 var(--f-titulo);color:var(--f-apoio);letter-spacing:.1em}
+.zona-segura{position:absolute;left:0;right:0;height:calc(250*var(--u));background:repeating-linear-gradient(45deg,rgba(232,85,41,.18) 0 calc(12*var(--u)),transparent calc(12*var(--u)) calc(24*var(--u)));display:none}
+.zona-segura--topo{top:0}.zona-segura--base{bottom:0}
+.mostra-grade .zona-segura{display:block}
+.carrossel{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,320px);gap:var(--e4);overflow-x:auto;padding-bottom:var(--e3);scroll-snap-type:x mandatory}
+.carrossel > *{scroll-snap-align:start}
+
+/* ---------- 9. Capa e navegação ---------- */
+.capa{min-height:100vh;display:flex;flex-direction:column;padding:var(--e6) 0 var(--e8)}
+.capa .wrap{width:100%}
+.capa-topo{display:flex;justify-content:space-between;align-items:center;gap:var(--e5);flex-wrap:wrap}
+.capa-topo .rotulo{color:var(--canela)}
+.capa-corpo{flex:1;display:grid;grid-template-columns:7fr 5fr;gap:var(--e8);align-items:center;padding:var(--e9) 0 var(--e7)}
+.capa-marca{width:min(620px,100%)}
+.capa h1{margin-top:var(--e7);max-width:13ch}
+.capa .chamada{margin-top:var(--e5);color:var(--creme)}
+.capa-tons{display:grid;gap:var(--e3)}
+.capa-tom{display:grid;grid-template-columns:72px 1fr;align-items:center;gap:var(--e4)}
+.capa-tom span:first-child{height:72px;border-radius:var(--raio)}
+.capa-tom b{display:block;font:800 18px/1.1 var(--f-titulo);color:var(--branco)}
+.capa-tom small{font:400 13px/1.3 var(--f-texto);color:var(--canela)}
+.capa-pe{display:flex;justify-content:space-between;gap:var(--e5);flex-wrap:wrap;border-top:1px solid var(--linha-escura);padding-top:var(--e5);font-size:14px;color:var(--canela)}
+.sumario{columns:2;column-gap:var(--e8);list-style:none;padding:0;margin:0;counter-reset:s}
+.sumario li{break-inside:avoid;border-top:1px solid var(--f-linha);padding:12px 0;display:grid;grid-template-columns:44px 1fr;gap:var(--e3)}
+.sumario li span{font:800 14px/1.6 var(--f-titulo);color:var(--f-destaque)}
+.sumario a{color:var(--f-titulo-c);text-decoration:none;font:700 16px/1.5 var(--f-titulo)}
+.sumario a:hover{text-decoration:underline}
+.sumario small{display:block;font:400 13px/1.45 var(--f-texto);color:var(--f-apoio)}
+
+/* ---------- 10. Rodapé ---------- */
+.rodape{padding:var(--e9) 0 var(--e8)}
+.rodape-grade{display:grid;grid-template-columns:5fr 7fr;gap:var(--e8);align-items:start}
+.rodape img.rodape-marca{width:min(320px,100%)}
+.rodape p{color:var(--canela);font-size:14px}
+.btn-topo{position:fixed;right:20px;bottom:20px;z-index:25;width:48px;height:48px;border-radius:50%;border:0;background:var(--ouro);color:var(--cafe);display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.btn-topo.ativo{opacity:1;pointer-events:auto}
+.btn-grade{position:fixed;left:24px;bottom:20px;z-index:25;min-height:44px;padding:10px 16px;border-radius:999px;border:0;background:var(--cafe);color:var(--branco);font:700 13px/1 var(--f-titulo);display:none;align-items:center;gap:8px}
+.btn-grade.ativo{display:inline-flex}
+
+/* Entrada discreta */
+.js .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.js .reveal.in{opacity:1;transform:none}
+
+/* ---------- 11. Mobile System v1 (TRAVADO) ---------- */
+@media (max-width:1024px){
+  :root{--lado:32px;--cartela-borda:8px}
+  .sec{padding:var(--e9) 0}
+  .cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cols-7-5,.cols-5-7,.cols-8-4,.capa-corpo,.rodape-grade{grid-template-columns:1fr}
+  .nf-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sec-head,.bloco-head{grid-template-columns:1fr;gap:var(--e3)}
+  .bloco-corpo{margin-left:0}
+}
+@media (max-width:640px){
+  :root{--lado:20px;--cartela-borda:6px;--t-corpo:16px}
+  .sec{padding:var(--e8) 0}
+  .bloco{margin-top:var(--e8)}
+  .cols-2,.cols-3,.cols-4,.par,.nf-grid{grid-template-columns:1fr}
+  .sumario{columns:1}
+  .sec-head{margin-bottom:var(--e6)}
+  .folio{font-size:56px}
+  .capa h1{max-width:none}
+  .marca-palco{min-height:160px}
+  .btn{width:100%}
+  .matriz-dica{display:flex}
+  .nota,.alerta,.certo{padding:var(--e4) var(--e4) var(--e4) var(--e5)}
+  table.vira-cartao thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+  table.vira-cartao,table.vira-cartao tbody,table.vira-cartao tr,table.vira-cartao td,table.vira-cartao th{display:block;width:100%}
+  table.vira-cartao tr{border:1px solid var(--f-linha);border-radius:var(--raio);padding:var(--e3) var(--e4);margin-bottom:var(--e3);background:var(--f-painel)}
+  table.vira-cartao td,table.vira-cartao tbody th{border:0;padding:6px 0}
+  table.vira-cartao td::before,table.vira-cartao tbody th::before{content:attr(data-label);display:block;font:700 11px/1.3 var(--f-titulo);letter-spacing:.12em;text-transform:uppercase;color:var(--f-apoio);margin-bottom:2px}
+  table.vira-cartao td:first-child::before,table.vira-cartao tbody th:first-child::before{display:none}
+  table.vira-cartao td:first-child,table.vira-cartao tbody th:first-child{font:800 17px/1.3 var(--f-titulo);border-bottom:1px solid var(--f-linha);padding-bottom:var(--e2);margin-bottom:var(--e2)}
+  table.chave-valor tr{display:grid;grid-template-columns:1fr}
+  .btn-grade{left:16px}
+}
+@media (max-width:380px){
+  h1{font-size:44px}
+  h2{font-size:31px}
+  .pc-titulo{letter-spacing:-.01em}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .reveal{opacity:1;transform:none;transition:none}
+}
+
+/* ---------- 12. Impressão ---------- */
+@page{size:A4;margin:14mm 14mm 16mm 18mm}
+@media print{
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body::before{width:4mm}
+  .btn-topo,.btn-grade,.copiar,.mock-ampliar,.pular,.matriz-dica{display:none!important}
+  .js .reveal{opacity:1!important;transform:none!important}
+  .capa{min-height:auto;break-after:page}
+  .sec{padding:12mm 0;break-before:page}
+  .wrap{padding:0 0 0 6mm;max-width:none}
+  .bloco,.cor,.ficha,.mock-quadro,.faca,.nao-faca,.nota,.alerta,.certo,table.consulta tr,.check-row{break-inside:avoid}
+  .table-wrap.matriz{overflow:visible;border:0}
+  .table-wrap.matriz table{min-width:0}
+  a{text-decoration:none}
+  .carrossel{grid-auto-flow:row;grid-template-columns:repeat(3,1fr);overflow:visible}
+}
+
+.g3-foto{position:absolute;right:calc(-40*var(--u));top:calc(150*var(--u));width:calc(620*var(--u));height:auto}
+</style>
+</head>
+<body>
+<a class="pular" href="#g-1">Pular para o conteúdo</a>
+<header class="capa campo-cafe" id="topo" style="min-height:auto">
+  <div class="wrap capa-topo">
+    <span class="rotulo">Guia de uso · skill branding-minas-cabelos</span>
+    <span class="rotulo">Cartela Mineira v1</span>
+  </div>
+  <div class="wrap" style="padding-top:64px">
+    <img src="assets/minas-cabelos-completa-branca.svg" width="1120" height="400" alt="Minas Cabelos" style="width:min(420px,100%)">
+    <h1 style="margin-top:40px;max-width:16ch">Peça em português, receba no <em>padrão</em></h1>
+    <p class="chamada">Este guia é para quem vai usar a skill no dia a dia: o Régis, quem cuida do Instagram, quem atende no WhatsApp. Ele mostra como pedir e o que volta, peça por peça.</p>
+  </div>
+</header>
+<main id="conteudo">
+
+<section class="sec sec--leite" id="g-1" aria-labelledby="g-1-t">
+  <div class="wrap">
+    <header class="sec-head"><div class="folio">01<small>Como pedir</small></div><div><span class="rotulo">A fórmula</span><h2 id="g-1-t">Diga a peça, o produto e o <em>objetivo</em></h2><p class="chamada">A skill já sabe a cor, a letra, a marca e a medida de cada formato. Você só precisa dizer três coisas.</p></div></header>
+    <div class="cols-3">
+      <div class="painel"><span class="rotulo rotulo--destaque">1 · A peça</span><p class="mt-1">Post, carrossel, story, reels, catálogo do WhatsApp, mensagem, etiqueta, cartão de cuidados, página, vaga, apresentação, e-mail.</p></div>
+      <div class="painel"><span class="rotulo rotulo--destaque">2 · O produto ou tema</span><p class="mt-1">Nome, material (humano, orgânico, bio fibra), comprimento em cm, peso em g, tom e, se quiser, o preço atualizado.</p></div>
+      <div class="painel"><span class="rotulo rotulo--destaque">3 · O objetivo</span><p class="mt-1">Apresentar um produto, ensinar um cuidado, chamar para a loja, responder uma dúvida, divulgar uma vaga.</p></div>
+    </div>
+    <div class="par mt-3">
+      <div class="faca"><p>"Faz um post da Minas da peruca Renata, cabelo humano, 60 cm, tom 1B, para apresentar a peça. Preço fica de fora."</p></div>
+      <div class="nao-faca"><p>"Faz um post bonito pra vender peruca." (A skill vai perguntar o produto ou entregar com <code>[confirmar]</code> em tudo.)</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec--cafe" id="g-2" aria-labelledby="g-2-t">
+  <div class="wrap">
+    <header class="sec-head"><div class="folio">02<small>Pedidos prontos</small></div><div><span class="rotulo">Copie e adapte</span><h2 id="g-2-t">Doze pedidos que já <em>funcionam</em></h2></div></header>
+    <div class="table-wrap">
+      <table class="consulta">
+        <thead><tr><th>Peça</th><th>Pedido</th><th>O que volta</th></tr></thead>
+        <tbody>
+          <tr><td>Post de produto</td><td>"Post 1080 × 1350 da Minas da peruca Vanuza, cabelo humano, 50 cm."</td><td>Campo café, cartela na borda, foto recortada, nome, material, cm e g, palavra à mão no título, marca branca.</td></tr>
+          <tr><td>Carrossel</td><td>"Carrossel de 6 lâminas no padrão da Minas: como escolher o comprimento do mega hair."</td><td>Capa café com a pergunta, miolo creme numerado, régua de comprimento, lâmina final com chamada e canais.</td></tr>
+          <tr><td>Story</td><td>"Story da Minas avisando que chegaram front laces de bio fibra."</td><td>1080 × 1920 com zona segura, uma informação, botão "Fale com a loja".</td></tr>
+          <tr><td>Capa de reels</td><td>"Capa de reels: Invisible Hair em fita adesiva."</td><td>Título no recorte central, cartela fina, palavra à mão.</td></tr>
+          <tr><td>Catálogo WhatsApp</td><td>"Imagem de catálogo do tic tac kit 2 peças, cabelo humano, 50 cm, 100 g."</td><td>1080 × 1080 sobre creme com ficha curta e código.</td></tr>
+          <tr><td>Mensagem</td><td>"Mensagem de pós-venda para quem comprou mega hair de queratina."</td><td>Texto pronto, acolhedor, com os cuidados e o convite para manutenção.</td></tr>
+          <tr><td>Etiqueta</td><td>"Etiqueta 50 × 75 mm do rabo de cavalo bio fibra 65 cm, 180 g."</td><td>Etiqueta com tipo, material, cm, g, tom, código e <code>R$ [valor]</code>.</td></tr>
+          <tr><td>Cartão de cuidados</td><td>"Cartão A6 frente e verso com os cuidados da peruca de cabelo humano."</td><td>Frente café com a marca, verso creme com cinco cuidados e quando voltar à loja.</td></tr>
+          <tr><td>Vaga</td><td>"Post de vaga de auxiliar de loja no padrão da Minas."</td><td>Café, título curto, três atividades, como se candidatar, sem gradiente.</td></tr>
+          <tr><td>Embaixadora</td><td>"Story para a embaixadora divulgar o cupom dela."</td><td>Selo "Parceria Minas Cabelos", publicidade identificada, cupom.</td></tr>
+          <tr><td>Página</td><td>"Landing page da linha de próteses capilares masculinas."</td><td>HTML responsivo com topo café, explicação, ficha, perguntas, rodapé com identificação.</td></tr>
+          <tr><td>Apresentação</td><td>"Apresentação de 8 slides para treinar a equipe nos tipos de cabelo."</td><td>Deck 1440 × 900 no esqueleto da casa, com notas do apresentador.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec--leite" id="g-3" aria-labelledby="g-3-t">
+  <div class="wrap">
+    <header class="sec-head"><div class="folio">03<small>Exemplo</small></div><div><span class="rotulo">Um pedido, do começo ao fim</span><h2 id="g-3-t">Do pedido à peça <em>pronta</em></h2></div></header>
+    <div class="cols-5-7">
+      <div>
+        <div class="modelo"><button class="copiar" type="button" data-copiar="#g3-pedido">Copiar</button><p class="modelo-texto" id="g3-pedido">Faz um post da Minas Cabelos da peruca Wilma, cabelo humano, 45 cm, ondulada, para apresentar a peça no feed. Sem preço na arte.</p></div>
+        <ol class="lista mt-2">
+          <li>A skill lê o padrão (cores, cartela, palavra à mão, medidas).</li>
+          <li>Monta a arte 1080 × 1350 com a foto recortada da peruca.</li>
+          <li>Escreve a legenda com material, comprimento e chamada para o WhatsApp.</li>
+          <li>Confere o checklist e diz o que ficou em aberto: "peso em [confirmar]".</li>
+        </ol>
+      </div>
+      <figure class="mock-quadro">
+        <div class="mock mock--post">
+          <div class="peca campo-cafe">
+            <span class="pc-cartela"></span>
+            <img class="g3-foto" src="assets/fotos/minas-peruca-humana-wilma.png" alt="Peruca Wilma em manequim" width="500" height="500">
+            <div class="pc-area">
+              <span class="pc-rotulo">Peruca · cabelo humano</span>
+              <p class="pc-titulo" style="margin-top:calc(24*var(--u));max-width:calc(560*var(--u))">Wilma, ondas <em>leves</em></p>
+              <div class="pc-espaco"></div>
+              <dl class="pc-dados"><dt>Comprimento</dt><dd>45 cm</dd><dt>Textura</dt><dd>Ondulada</dd><dt>Peso</dt><dd>[confirmar]</dd></dl>
+              <div class="pc-rodape" style="margin-top:calc(40*var(--u))"><img class="pc-marca--rodape" src="assets/minas-cabelos-reduzida-branca.svg" alt="Minas Cabelos" width="1120" height="250"><span class="pc-id">@minascabelos</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption>O que volta: arte pronta e legenda. Peso fica em aberto até a loja informar.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec--cafe" id="g-4" aria-labelledby="g-4-t">
+  <div class="wrap">
+    <header class="sec-head"><div class="folio">04<small>Onde usar</small></div><div><span class="rotulo">Instalação</span><h2 id="g-4-t">Uma skill, três <em>lugares</em></h2></div></header>
+    <div class="cols-3">
+      <div class="painel"><span class="rotulo rotulo--destaque">Claude Code</span><p class="mt-1">Ambiente completo: cria arquivos, usa as imagens da pasta, exporta PDF.</p><p class="mt-1"><code>git clone https://github.com/rafaelnasch/branding-minas-cabelos.git ~/.claude/skills/branding-minas-cabelos</code></p></div>
+      <div class="painel"><span class="rotulo rotulo--destaque">claude.ai e celular</span><p class="mt-1">Baixe o ZIP em Releases e envie em Settings, Capabilities, Skills. As peças saem em arquivo único.</p></div>
+      <div class="painel"><span class="rotulo rotulo--destaque">Codex</span><p class="mt-1"><code>git clone https://github.com/rafaelnasch/branding-minas-cabelos.git ~/.codex/skills/branding-minas-cabelos</code></p></div>
+    </div>
+    <div class="nota nota--larga mt-3"><strong>Antes de publicar</strong>Toda peça passa pelo checklist da seção 24 do brand book. Dado da loja que ainda não foi confirmado sai como <code>[confirmar]</code>: preencha antes de postar.</div>
+  </div>
+</section>
+
+<section class="sec sec--leite" id="g-5" aria-labelledby="g-5-t">
+  <div class="wrap">
+    <header class="sec-head"><div class="folio">05<small>Limites</small></div><div><span class="rotulo">O que a skill não faz</span><h2 id="g-5-t">O que fica com a <em>loja</em></h2></div></header>
+    <ul class="lista">
+      <li>Não inventa preço, endereço, CNPJ, prazo de entrega, origem do cabelo ou depoimento.</li>
+      <li>Não gera foto de pessoa nem "melhora" a foto do produto: a cor da peça tem que ser a real.</li>
+      <li>Não publica nada sozinha: a peça volta para você conferir e postar.</li>
+      <li>Não decide política de troca nem condição de pagamento: isso é da loja (pendências 5 e 6).</li>
+    </ul>
+    <a class="btn btn--cheio mt-2" href="brand-book.html">Abrir o brand book completo</a>
+  </div>
+</section>
+</main>
+<footer class="rodape campo-torra"><div class="wrap"><img class="rodape-marca" src="assets/minas-cabelos-completa-branca.svg" width="1120" height="400" alt="Minas Cabelos"><p class="mt-2">Guia de uso da skill branding-minas-cabelos · Cartela Mineira v1 · setembro de 2026. Sistema de identidade organizado com a GrowAI.</p></div></footer>
+<script src="mcviz.js"></script>
+<script src="mcforms.js"></script>
+<script>
+document.querySelectorAll('.copiar').forEach(function(b){b.addEventListener('click',function(){var a=document.querySelector(b.getAttribute('data-copiar'));if(!a)return;var t=a.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent='Copiado';setTimeout(function(){b.textContent='Copiar'},1600)}).catch(function(){})})});
+</script>
+<script data-minas-responsive="v1">
+/* Mobile System v1 da Minas Cabelos (copie literal, não reescreva).
+   1. Tabela de consulta (table.consulta): cada célula ganha data-label com o texto do
+      cabeçalho; no celular (até 640 px) cada linha vira um cartão e a primeira célula vira
+      o título. Tabela sem cabeçalho e com duas colunas vira chave e valor.
+   2. Matriz (.table-wrap.matriz), carrossel e fita: rolagem local visível, tabindex="0",
+      rótulo acessível e a dica "Deslize para ver..." logo acima (herda as classes mt-*).
+   Não esconde o estouro lateral da página: cada contêiner cuida do seu.
+   window.minasMobile(raiz) roda de novo sobre conteúdo criado depois. */
+(function(){
+  var seta = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+  function todos(raiz, sel){
+    var lista = Array.prototype.slice.call(raiz.querySelectorAll ? raiz.querySelectorAll(sel) : []);
+    if (raiz.matches && raiz.matches(sel)) lista.unshift(raiz);
+    return lista;
+  }
+  function dica(el, texto){
+    var antes = el.previousElementSibling;
+    if (antes && antes.classList.contains('matriz-dica')) return;
+    var d = document.createElement('p');
+    d.className = 'matriz-dica';
+    Array.prototype.forEach.call(el.classList, function(c){ if (/^mt-\d$/.test(c)) d.classList.add(c); });
+    d.innerHTML = texto + ' ' + seta;
+    el.parentNode.insertBefore(d, el);
+  }
+  function rolagem(el, rotulo){
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    if (!el.hasAttribute('role')) el.setAttribute('role', 'region');
+    if (!el.hasAttribute('aria-label')) el.setAttribute('aria-label', rotulo);
+  }
+  function minasMobile(raiz){
+    raiz = raiz || document;
+    todos(raiz, 'table.consulta').forEach(function(tabela){
+      if (tabela.closest('.table-wrap.matriz') || tabela.__minas) return;
+      tabela.__minas = 1;
+      var cab = Array.prototype.map.call(tabela.querySelectorAll('thead th'), function(th, i){
+        return th.textContent.replace(/\s+/g, ' ').trim() || ('Coluna ' + (i + 1));
+      });
+      var linhas = Array.prototype.slice.call(tabela.querySelectorAll('tbody tr'));
+      if (!cab.length) {
+        var chaveValor = linhas.length && linhas.every(function(tr){ return tr.querySelectorAll(':scope > td, :scope > th').length === 2; });
+        if (chaveValor) tabela.classList.add('vira-cartao', 'chave-valor');
+        return;
+      }
+      tabela.classList.add('vira-cartao');
+      linhas.forEach(function(tr){
+        var i = 0;
+        Array.prototype.forEach.call(tr.children, function(celula){
+          if (!celula.matches('td, th')) return;
+          if (!celula.hasAttribute('data-label')) celula.setAttribute('data-label', cab[i] || 'Informação');
+          i += Number(celula.getAttribute('colspan') || 1);
+        });
+      });
+    });
+    todos(raiz, '.table-wrap.matriz').forEach(function(wrap){
+      var cap = wrap.querySelector('caption');
+      rolagem(wrap, cap ? cap.textContent.trim() : 'Tabela com rolagem lateral');
+      dica(wrap, 'Deslize para ver a tabela inteira');
+    });
+    todos(raiz, '.carrossel, .fita').forEach(function(faixa){
+      rolagem(faixa, faixa.getAttribute('data-rotulo') || (faixa.classList.contains('fita') ? 'Quadros do vídeo, com rolagem lateral' : 'Lâminas do carrossel, com rolagem lateral'));
+      dica(faixa, faixa.classList.contains('fita') ? 'Deslize para ver todos os quadros' : 'Deslize para ver todas as lâminas');
+    });
+  }
+  window.minasMobile = minasMobile;
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ minasMobile(document); });
+  else minasMobile(document);
+})();
+</script>
+<script>
+/* Ferramentas das peças-modelo:
+   1. Mostrar grade: o botão fixo aparece só quando há uma peça com .grade-overlay (ou uma
+      .grade-doc) na tela, e liga as grades de todas ao mesmo tempo.
+   2. Ver em tamanho real: botão na legenda de cada .mock-quadro cuja peça aparece a menos de
+      60% do tamanho; a peça passa a rolar no lugar, em pixels reais.
+   3. Copiar: .copiar copia o .modelo-texto do mesmo .modelo (ou o alvo de data-copiar).
+   4. Impressão: abre as sanfonas e carrega as imagens antes de imprimir. */
+(function(){
+  var botao = document.querySelector('.btn-grade');
+  var visiveis = [];
+  var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function(entradas){
+    entradas.forEach(function(en){
+      var i = visiveis.indexOf(en.target);
+      if (en.isIntersecting && i < 0) visiveis.push(en.target);
+      if (!en.isIntersecting && i > -1) visiveis.splice(i, 1);
+    });
+    mostraBotao();
+  }) : null;
+  function mostraBotao(){
+    if (!botao) return;
+    var tem = io ? visiveis.length > 0 : !!document.querySelector('.grade-overlay, .grade-doc');
+    botao.classList.toggle('ativo', tem);
+  }
+  function minasGrade(raiz){
+    (raiz || document).querySelectorAll('.grade-overlay, .grade-doc').forEach(function(g){
+      var alvo = g.closest('.mock') || g.parentElement;
+      if (!alvo || alvo.__grade) return;
+      alvo.__grade = 1;
+      if (io) io.observe(alvo);
+    });
+    mostraBotao();
+  }
+  if (botao) botao.addEventListener('click', function(){
+    var liga = !document.documentElement.classList.contains('mostra-grade');
+    document.documentElement.classList.toggle('mostra-grade', liga);
+    botao.setAttribute('aria-pressed', liga ? 'true' : 'false');
+    var txt = botao.querySelector('span'), nome = liga ? 'Esconder grade' : 'Mostrar grade';
+    if (txt) txt.textContent = nome;
+    botao.setAttribute('aria-label', nome); botao.title = nome;
+  });
+
+  var ro = ('ResizeObserver' in window) ? new ResizeObserver(function(es){ es.forEach(function(e){ if (e.target.__mede) e.target.__mede(); }); }) : null;
+  function minasAmpliar(raiz){
+    (raiz || document).querySelectorAll('.mock-quadro').forEach(function(q){
+      if (q.__ampliar) return;
+      var mock = q.querySelector(':scope > .mock'), cap = q.querySelector(':scope > figcaption');
+      if (!mock || !cap || q.closest('.carrossel, .fita, .ig-grade')) return;
+      q.__ampliar = 1;
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'mock-ampliar'; b.setAttribute('aria-pressed', 'false');
+      b.textContent = 'Ver em tamanho real';
+      b.addEventListener('click', function(){
+        var liga = !q.classList.contains('tamanho-real');
+        q.classList.toggle('tamanho-real', liga);
+        b.setAttribute('aria-pressed', liga ? 'true' : 'false');
+        b.textContent = liga ? 'Ver reduzida' : 'Ver em tamanho real';
+        q.scrollLeft = 0;
+      });
+      cap.appendChild(b);
+      q.__mede = function(){
+        if (q.classList.contains('tamanho-real')) { b.hidden = false; return; }
+        var base = parseFloat(getComputedStyle(mock).getPropertyValue('--base')) || 1080;
+        b.hidden = mock.getBoundingClientRect().width >= base * 0.6;
+      };
+      q.__mede();
+      if (ro) ro.observe(q);
+    });
+  }
+
+  function copia(texto, feito){
+    function reserva(){
+      var t = document.createElement('textarea');
+      t.value = texto; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); feito(); } catch (e) {}
+      document.body.removeChild(t);
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texto).then(feito, reserva);
+      else reserva();
+    } catch (e) { reserva(); }
+  }
+  document.addEventListener('click', function(ev){
+    var b = ev.target.closest ? ev.target.closest('.copiar') : null;
+    if (!b) return;
+    var sel = b.getAttribute('data-copiar');
+    var alvo = sel ? document.querySelector(sel) : (b.closest('.modelo') || document).querySelector('.modelo-texto');
+    if (!alvo) return;
+    if (!b.__texto) b.__texto = b.textContent;
+    copia(alvo.innerText.trim(), function(){
+      b.setAttribute('data-copiado', ''); b.textContent = 'Copiado';
+      setTimeout(function(){ b.removeAttribute('data-copiado'); b.textContent = b.__texto; }, 1800);
+    });
+  });
+  document.querySelectorAll('.copiar').forEach(function(b){ b.setAttribute('aria-live', 'polite'); });
+
+  var fechadas = [];
+  window.addEventListener('beforeprint', function(){
+    document.querySelectorAll('img[loading="lazy"]').forEach(function(i){ i.loading = 'eager'; });
+    document.querySelectorAll('details:not([open])').forEach(function(d){ d.open = true; fechadas.push(d); });
+  });
+  window.addEventListener('afterprint', function(){ fechadas.forEach(function(d){ d.open = false; }); fechadas = []; });
+
+  window.minasGrade = minasGrade; window.minasAmpliar = minasAmpliar;
+  function inicia(){ minasGrade(document); minasAmpliar(document); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', inicia);
+  else inicia();
+})();
+</script>
+<script>
+/* Entrada discreta: cada .reveal aparece uma vez ao entrar na tela.
+   Sem JavaScript (ou sem a classe js), o conteúdo já está visível.
+   window.minasReveal(raiz) observa blocos criados depois; window.minasAtualiza(raiz) roda tudo. */
+(function(){
+  var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function(entradas){
+    entradas.forEach(function(en){ if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.04 }) : null;
+  function minasReveal(raiz){
+    (raiz || document).querySelectorAll('.reveal:not(.in)').forEach(function(e){
+      if (!io) { e.classList.add('in'); return; }
+      if (e.__reveal) return; e.__reveal = 1; io.observe(e);
+    });
+  }
+  window.minasReveal = minasReveal;
+  window.minasAtualiza = function(raiz){
+    raiz = raiz || document;
+    if (window.minasMobile) window.minasMobile(raiz);
+    if (window.minasGrade) window.minasGrade(raiz);
+    if (window.minasAmpliar) window.minasAmpliar(raiz);
+    if (window.mcviz) window.mcviz.montar(raiz);
+    if (window.mcforms) window.mcforms.montar(raiz);
+    minasReveal(raiz);
+  };
+  window.addEventListener('beforeprint', function(){ document.querySelectorAll('.reveal').forEach(function(e){ e.classList.add('in'); }); });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ minasReveal(document); });
+  else minasReveal(document);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apresentação Minas Cabelos</title>
+<meta name="description" content="Esqueleto de apresentação da Minas Cabelos no sistema Cartela Mineira v1: dez tipos de slide em 1440 por 900, com navegação por teclado e toque, notas do apresentador e impressão em PDF.">
+<meta name="theme-color" content="#28170C">
+<link rel="icon" type="image/svg+xml" href="assets/minas-cabelos-favicon.svg">
+<link rel="stylesheet" href="assets/fontes/fontes.css">
+<script>
+/* Marca a página como "com JavaScript" antes de pintar: só assim o modo palco (slides escalados) liga.
+   Sem JavaScript, os slides aparecem empilhados e inteiros. */
+document.documentElement.classList.add('js');
+</script>
+<style>
+/* =====================================================================
+   CARTELA MINEIRA v1 · apresentação da Minas Cabelos
+   Ordem: tokens (os mesmos do brand-book.html), campos, reset, tipografia
+   de palco, componentes, estrutura do slide, os dez tipos, modo palco
+   (1440 × 900 escalado), interface (progresso, contador, notas), celular,
+   impressão. Uma única tag de estilo; só as cores do :root; superfície
+   chapada. Toda página leva a CARTELA na borda esquerda; a MECHA aparece
+   uma vez por slide, no máximo; cada título tem UMA palavra à mão (<em>).
+   ===================================================================== */
+
+/* ---------- 1. Tokens (bloco canônico do brand-book.html) ---------- */
+:root{
+  color-scheme: light;
+  --cafe:#28170C; --cafe-marca:#33150A; --ouro:#F0B800;
+  --mel:#DD9A37; --dourado:#E9B43E; --mata:#8B9D30; --cobre:#E85529; --vinho:#80170F;
+  --creme:#F1E4D1; --torra:#1B0F07; --painel:#3A2316; --leite:#FBF6EE; --areia:#E6D5BC;
+  --branco:#FFFFFF; --canela:#C9A98A; --tabaco:#6B4A36; --bronze:#8A5A00;
+  --linha-clara:#E6D5BC; --linha-escura:#4A3122;
+  --cartela:linear-gradient(180deg,var(--mel) 0 20%,var(--dourado) 20% 40%,var(--mata) 40% 60%,var(--cobre) 60% 80%,var(--vinho) 80% 100%);
+  --cartela-h:linear-gradient(90deg,var(--mel) 0 20%,var(--dourado) 20% 40%,var(--mata) 40% 60%,var(--cobre) 60% 80%,var(--vinho) 80% 100%);
+
+  --f-titulo:'Montserrat',Arial,sans-serif;
+  --f-texto:'Nunito Sans',Arial,sans-serif;
+  --f-mao:'Alex Brush',cursive;
+
+  /* Escala do SLIDE (palco de 1440 × 900). Nada abaixo de 16. */
+  --s-display:80px;    /* capa: até 3 linhas */
+  --s-secao:88px;
+  --s-frase:84px;      /* ideia única */
+  --s-titulo:58px;     /* miolo: até 2 linhas */
+  --s-sub:32px;
+  --s-chamada:26px;
+  --s-texto:22px;
+  --s-legenda:18px;
+  --s-rotulo:16px;
+  --s-folio:16px;
+  --s-esq:120px;       /* margem esquerda (depois da cartela de 28 px) */
+  --s-dir:96px;
+  --gut:64px;
+}
+@media (max-width:1024px){ :root{ --gut:32px; } }
+@media (max-width:640px){ :root{ --gut:20px; } }
+
+/* ---------- 2. Campos ---------- */
+.campo-leite,.campo-creme,.campo-branco{
+  --f-fundo:var(--leite); --f-titulo-c:var(--cafe-marca); --f-texto-c:var(--cafe-marca); --f-apoio:var(--tabaco);
+  --f-linha:var(--linha-clara); --f-destaque:var(--vinho); --f-mao-c:var(--vinho); --f-painel:var(--branco);
+  --f-btn-bg:var(--cafe); --f-btn-fg:var(--branco);
+  --dado-destaque:var(--vinho); --dado-1:#B08A6E; --dado-2:var(--tabaco); --dado-3:#D9C3A4; --dado-4:var(--areia);
+}
+.campo-creme{ --f-fundo:var(--creme); --f-linha:#D9C3A4; --f-painel:var(--leite); }
+.campo-branco{ --f-fundo:var(--branco); --f-painel:var(--leite); }
+.campo-cafe,.campo-painel,.campo-torra,.campo-vinho{
+  --f-fundo:var(--cafe); --f-titulo-c:var(--branco); --f-texto-c:var(--creme); --f-apoio:var(--canela);
+  --f-linha:var(--linha-escura); --f-destaque:var(--ouro); --f-mao-c:var(--ouro); --f-painel:var(--painel);
+  --f-btn-bg:var(--ouro); --f-btn-fg:var(--cafe);
+  --dado-destaque:var(--ouro); --dado-1:var(--dourado); --dado-2:var(--canela); --dado-3:var(--tabaco); --dado-4:var(--linha-escura);
+}
+.campo-painel{ --f-fundo:var(--painel); --f-painel:var(--cafe); --f-linha:#5A3D2A; }
+.campo-torra{ --f-fundo:var(--torra); --f-painel:var(--cafe); }
+.campo-vinho{ --f-fundo:var(--vinho); --f-texto-c:var(--branco); --f-apoio:var(--creme); --f-linha:#A1352B; --f-painel:#6B120B;
+  --dado-3:#B4554B; --dado-4:#A1352B; }
+.campo-leite,.campo-creme,.campo-branco,.campo-cafe,.campo-painel,.campo-torra,.campo-vinho{ background:var(--f-fundo); color:var(--f-texto-c); }
+
+/* ---------- 3. Reset ---------- */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+body{ margin:0; background:var(--torra); color:var(--cafe-marca); font-family:var(--f-texto); font-size:18px; line-height:1.55;
+  font-variant-numeric:lining-nums; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+h1,h2,h3,p,ul,ol,li,figure,blockquote,dl,dd,dt{ margin:0; padding:0; }
+ul,ol{ list-style:none; }
+img,svg{ display:block; max-width:100%; }
+img{ height:auto; }
+p,li,dd,dt,figcaption{ overflow-wrap:break-word; }
+a{ color:inherit; text-underline-offset:.2em; text-decoration-thickness:1px; }
+:focus-visible{ outline:3px solid var(--ouro); outline-offset:3px; }
+.ic{ width:24px; height:24px; flex:none; }
+.visualmente-oculto{ position:absolute!important; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
+/* ---------- 4. Tipografia de palco ---------- */
+.s-display,.s-titulo,.s-frase,.secao-titulo,.stat-conclusao,.etapa-t,.compara-t{
+  font-family:var(--f-titulo); font-weight:800; color:var(--f-titulo-c); letter-spacing:-.02em; text-wrap:balance; overflow-wrap:normal;
+}
+.s-display{ font-size:var(--s-display); line-height:1.02; }
+.s-titulo{ font-size:var(--s-titulo); line-height:1.08; }
+.s-frase{ font-size:var(--s-frase); line-height:1.08; }
+/* A PALAVRA À MÃO: uma por título, em Alex Brush, na cor de destaque do campo */
+:is(.s-display,.s-titulo,.s-frase,.secao-titulo,.stat-conclusao,.etapa-t,.compara-t) em{
+  font-family:var(--f-mao); font-style:normal; font-weight:400; color:var(--f-mao-c); font-size:1.34em; line-height:.75;
+  letter-spacing:0; padding:0 .04em; display:inline-block; transform:translateY(.04em);
+}
+.s-rotulo{ display:flex; align-items:center; gap:14px; font:700 var(--s-rotulo)/1.4 var(--f-titulo); letter-spacing:.16em; text-transform:uppercase; color:var(--f-destaque); }
+.s-rotulo--apoio{ color:var(--f-apoio); }
+.s-apoio{ font-size:var(--s-chamada); line-height:1.5; color:var(--f-texto-c); max-width:30em; text-wrap:pretty; }
+.s-legenda{ font-size:var(--s-legenda); line-height:1.5; color:var(--f-apoio); }
+.s-legenda b{ font:700 var(--s-rotulo)/1.4 var(--f-titulo); letter-spacing:.14em; text-transform:uppercase; color:var(--f-titulo-c); margin-right:10px; }
+
+/* ---------- 5. Componentes ---------- */
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:12px; min-height:60px; padding:16px 34px; border-radius:999px;
+  font:800 var(--s-rotulo)/1.25 var(--f-titulo); letter-spacing:.06em; text-transform:uppercase; text-decoration:none; border:2px solid transparent; text-align:center; }
+.btn--cheio{ background:var(--f-btn-bg); color:var(--f-btn-fg); }
+.btn--linha{ border-color:var(--f-titulo-c); color:var(--f-titulo-c); }
+.btn .ic{ width:22px; height:22px; }
+.pilula{ display:inline-flex; align-items:center; gap:8px; padding:8px 16px; border-radius:999px; border:1.5px solid var(--f-destaque);
+  font:700 15px/1.2 var(--f-titulo); letter-spacing:.06em; text-transform:uppercase; color:var(--f-titulo-c); }
+.s-meta{ display:flex; gap:48px; flex-wrap:wrap; }
+.s-meta div{ border-top:2px solid var(--f-destaque); padding-top:10px; min-width:140px; }
+.s-meta dt{ font:700 14px/1.3 var(--f-titulo); letter-spacing:.16em; text-transform:uppercase; color:var(--f-apoio); }
+.s-meta dd{ font:700 var(--s-texto)/1.35 var(--f-titulo); color:var(--f-titulo-c); margin-top:4px; }
+.mecha{ color:var(--f-destaque); }
+
+/* ---------- 6. Estrutura do slide ---------- */
+.deck{ position:relative; }
+.slide{ position:relative; overflow:hidden; display:flex; flex-direction:column;
+  padding:56px var(--s-dir) 52px var(--s-esq); background:var(--f-fundo); }
+/* A cartela na borda esquerda de todo slide */
+.slide::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:28px; background:var(--cartela); }
+.s-folio{ display:flex; justify-content:space-between; gap:24px; align-items:baseline; padding-bottom:14px; border-bottom:1px solid var(--f-linha);
+  font:700 var(--s-folio)/1.3 var(--f-titulo); letter-spacing:.14em; text-transform:uppercase; color:var(--f-apoio); }
+.s-folio b{ color:var(--f-titulo-c); font-weight:800; }
+.s-corpo{ flex:1; display:flex; flex-direction:column; justify-content:center; min-height:0; padding:36px 0 24px; }
+.s-rodape{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; }
+.s-simbolo{ width:52px; height:52px; }
+.s-num{ font:700 var(--s-folio)/1 var(--f-titulo); letter-spacing:.14em; color:var(--f-apoio); }
+.s-fonte{ font-size:var(--s-legenda); color:var(--f-apoio); max-width:56em; }
+.s-marca{ width:420px; }
+
+/* ---------- 7. Os dez tipos ---------- */
+/* 1 · capa (café) e 2 · capa clara (leite): marca, rótulo, título, apoio, dados */
+.capa .s-corpo,.capa-clara .s-corpo{ display:grid; grid-template-columns:7fr 5fr; gap:64px; align-items:center; }
+.capa-texto{ display:flex; flex-direction:column; gap:22px; }
+.capa .s-marca,.capa-clara .s-marca{ width:340px; }
+.capa-foto{ align-self:stretch; display:flex; flex-direction:column; justify-content:center; gap:14px; }
+.capa-foto .quadro{ background:var(--creme); border-radius:18px; aspect-ratio:4/5; max-height:560px; display:grid; place-items:center; overflow:hidden; position:relative; }
+.capa-foto .quadro img{ width:100%; height:100%; object-fit:contain; }
+.capa-clara .capa-foto .quadro{ background:var(--branco); border:1px solid var(--f-linha); }
+.capa .mecha{ width:300px; }
+
+/* 3 · seção: numeral grande, título e a mecha */
+.secao .s-corpo{ justify-content:center; gap:28px; }
+.secao-num{ font:800 220px/.8 var(--f-titulo); color:var(--f-destaque); letter-spacing:-.05em; }
+.secao-titulo{ font-size:var(--s-secao); line-height:1.04; max-width:14ch; }
+.secao .mecha{ width:420px; }
+
+/* 4 · ideia: uma frase só */
+.ideia .s-corpo{ gap:36px; }
+.ideia .s-frase{ max-width:17ch; }
+
+/* 5 · número em destaque */
+.stat .s-corpo{ display:grid; grid-template-columns:6fr 6fr; gap:72px; align-items:center; }
+.stat-num{ font:800 260px/.82 var(--f-titulo); color:var(--f-destaque); letter-spacing:-.05em; }
+.stat-num small{ display:block; font-size:64px; letter-spacing:-.02em; margin-top:12px; color:var(--f-titulo-c); }
+.stat-conclusao{ font-size:44px; line-height:1.15; }
+.stat-texto{ display:flex; flex-direction:column; gap:24px; }
+
+/* 6 · gráfico */
+.grafico .s-corpo{ display:grid; grid-template-columns:4fr 8fr; gap:56px; align-items:center; }
+.grafico-area{ background:var(--f-painel); border:1px solid var(--f-linha); border-radius:18px; padding:28px 32px; }
+.grafico-svg{ width:100%; min-height:300px; }
+
+/* 7 · compara: assim / não assim */
+.compara .s-corpo{ gap:32px; }
+.compara-grade{ display:grid; grid-template-columns:1fr 1fr; gap:32px; }
+.compara-card{ border-radius:18px; padding:32px 36px; background:var(--f-painel); border:1px solid var(--f-linha); display:flex; flex-direction:column; gap:16px; }
+.compara-card .s-rotulo{ color:#3F6B1E; }
+.compara-card--nao .s-rotulo{ color:#B42318; }
+.compara-t{ font-size:var(--s-sub); line-height:1.2; }
+.compara-card p{ font-size:var(--s-texto); line-height:1.5; }
+.compara-card .ic{ width:28px; height:28px; }
+
+/* 8 · citação */
+.citacao .s-corpo{ gap:32px; }
+.citacao blockquote p{ font:800 64px/1.12 var(--f-titulo); color:var(--f-titulo-c); letter-spacing:-.02em; max-width:18ch; text-wrap:balance; }
+.citacao blockquote p em{ font-family:var(--f-mao); font-weight:400; font-style:normal; color:var(--f-mao-c); font-size:1.34em; line-height:.75; display:inline-block; }
+.citacao figcaption{ font-size:var(--s-legenda); color:var(--f-apoio); }
+.citacao figcaption b{ font:800 var(--s-texto)/1.3 var(--f-titulo); color:var(--f-titulo-c); display:block; }
+.citacao .mecha{ width:260px; }
+
+/* 9 · passos */
+.passos .s-corpo{ gap:44px; }
+.etapas{ display:grid; grid-template-columns:repeat(4,1fr); gap:28px; counter-reset:e; }
+.etapa{ border-top:4px solid var(--f-destaque); padding-top:20px; display:flex; flex-direction:column; gap:12px; }
+.etapa-n{ font:800 48px/1 var(--f-titulo); color:var(--f-destaque); }
+.etapa-t{ font-size:28px; line-height:1.2; }
+.etapa p{ font-size:20px; line-height:1.5; color:var(--f-texto-c); }
+
+/* 10 · closer: agradecimento e canais */
+.closer .s-corpo{ display:grid; grid-template-columns:6fr 6fr; gap:64px; align-items:center; }
+.canais{ display:grid; gap:18px; }
+.canal{ display:grid; grid-template-columns:52px 1fr; gap:18px; align-items:center; }
+.canal span.ic-bola{ width:52px; height:52px; border-radius:50%; border:1.5px solid var(--f-destaque); display:grid; place-items:center; color:var(--f-destaque); }
+.canal b{ display:block; font:800 var(--s-texto)/1.25 var(--f-titulo); color:var(--f-titulo-c); }
+.canal small{ font-size:16px; color:var(--f-apoio); }
+.closer-id{ font-size:16px; color:var(--f-apoio); line-height:1.5; }
+
+/* ---------- 8. Interface (oculta fora do modo palco) ---------- */
+.progresso,.contador,.painel-notas{ display:none; }
+aside.notas{ display:none; }
+.painel-notas h2{ font:700 14px/1.3 var(--f-titulo); letter-spacing:.16em; text-transform:uppercase; color:var(--ouro); }
+.painel-num{ font:800 40px/1 var(--f-titulo); color:var(--branco); margin-top:10px; }
+.painel-num span{ font-size:18px; color:var(--canela); }
+.painel-tit{ font:700 18px/1.35 var(--f-titulo); color:var(--branco); margin-top:8px; }
+.painel-txt{ margin-top:18px; overflow:auto; flex:1; font-size:15px; line-height:1.6; color:var(--creme); }
+.painel-txt p + p{ margin-top:10px; }
+.painel-prox{ margin-top:16px; padding-top:16px; border-top:1px solid var(--linha-escura); font-size:14px; color:var(--canela); }
+.painel-prox b{ color:var(--branco); }
+.painel-teclas{ margin-top:12px; font-size:13px; line-height:1.7; color:var(--canela); }
+.painel-teclas kbd{ display:inline-block; min-width:1.9em; padding:0 .45em; border:1px solid var(--linha-escura); border-bottom-width:2px; border-radius:4px; font:700 12px/1.6 var(--f-titulo); color:var(--ouro); text-align:center; }
+
+/* ---------- 9. Modo palco (tela maior que 640 × 500, com JavaScript) ---------- */
+@media screen and (min-width:641px) and (min-height:501px){
+  html.js,html.js body{ height:100%; }
+  html.js .palco{ position:fixed; inset:0; overflow:hidden; background:var(--torra); }
+  html.js.com-notas .palco{ right:380px; }
+  html.js .deck{ position:absolute; left:50%; top:50%; width:1440px; height:900px; transform:translate(-50%,-50%) scale(var(--k,1)); transform-origin:50% 50%; }
+  html.js .slide{ position:absolute; inset:0; opacity:0; visibility:hidden; transition:opacity .25s ease,visibility 0s linear .25s; }
+  html.js .slide.ativo{ opacity:1; visibility:visible; transition:opacity .25s ease; }
+  html.js .progresso{ display:block; position:absolute; left:28px; top:0; right:0; height:4px; z-index:5; pointer-events:none; }
+  html.js .progresso span{ display:block; height:100%; width:100%; background:var(--ouro); transform-origin:0 50%; transform:scaleX(var(--p,.1)); transition:transform .25s ease; }
+  html.js .deck[data-tom="claro"] .progresso span{ background:var(--vinho); }
+  html.js .contador{ display:flex; gap:.4em; position:absolute; left:var(--s-esq); bottom:52px; z-index:5; pointer-events:none;
+    font:700 var(--s-folio)/1 var(--f-titulo); letter-spacing:.14em; font-variant-numeric:tabular-nums; color:var(--canela); }
+  html.js .contador b{ color:var(--branco); }
+  html.js .deck[data-tom="claro"] .contador{ color:var(--tabaco); }
+  html.js .deck[data-tom="claro"] .contador b{ color:var(--cafe-marca); }
+  html.js .s-num{ visibility:hidden; }
+  html.js .painel-notas{ display:flex; flex-direction:column; position:fixed; top:0; right:0; bottom:0; width:380px; z-index:10;
+    background:var(--cafe); color:var(--creme); border-left:3px solid var(--ouro); padding:32px 28px 28px; transform:translateX(100%); visibility:hidden; }
+  html.js.com-notas .painel-notas{ transform:none; visibility:visible; }
+}
+@media screen and (min-width:641px) and (min-height:501px) and (prefers-reduced-motion:reduce){
+  html.js .slide,html.js .slide.ativo,html.js .progresso span{ transition:none; }
+}
+
+/* ---------- 10. Celular (até 640 px, ou deitado até 500 de altura): slides empilhados ---------- */
+@media screen and (max-width:640px), screen and (max-height:500px){
+  .slide{ padding:24px var(--gut) 32px calc(var(--gut) + 14px); min-height:auto; }
+  .slide::before{ width:10px; }
+  .s-folio{ font-size:11px; flex-wrap:wrap; gap:4px 16px; }
+  .s-corpo{ padding:32px 0 28px; }
+  .capa .s-corpo,.capa-clara .s-corpo,.stat .s-corpo,.grafico .s-corpo,.closer .s-corpo{ display:flex; flex-direction:column; align-items:stretch; gap:28px; }
+  .compara-grade,.etapas{ grid-template-columns:1fr; gap:18px; }
+  .s-marca{ width:min(100%,240px); }
+  .s-display{ font-size:42px; }
+  .s-titulo{ font-size:32px; }
+  .s-frase{ font-size:36px; }
+  .secao-titulo{ font-size:40px; }
+  .secao-num{ font-size:110px; }
+  .stat-num{ font-size:120px; }
+  .stat-num small{ font-size:32px; }
+  .stat-conclusao{ font-size:26px; }
+  .citacao blockquote p{ font-size:32px; }
+  .s-apoio{ font-size:18px; }
+  .s-meta{ gap:16px 24px; }
+  .s-meta dd{ font-size:17px; }
+  .compara-card{ padding:20px; }
+  .compara-t{ font-size:22px; }
+  .compara-card p,.etapa p{ font-size:16px; }
+  .etapa-t{ font-size:22px; }
+  .etapa-n{ font-size:32px; }
+  .grafico-area{ padding:16px; }
+  .capa-foto .quadro{ max-height:340px; }
+  .canal b{ font-size:17px; }
+  .canal{ grid-template-columns:44px 1fr; }
+  .canal span.ic-bola{ width:44px; height:44px; }
+  .secao .mecha,.capa .mecha{ width:220px; }
+  .s-simbolo{ width:36px; height:36px; }
+  .btn{ width:100%; }
+}
+@media screen and (max-width:380px){
+  .s-display{ font-size:36px; }
+  .s-titulo{ font-size:28px; }
+  .s-frase{ font-size:31px; }
+  .stat-num{ font-size:96px; }
+}
+
+/* ---------- 11. Impressão e PDF: 1440 × 900, um slide por página ---------- */
+@page{ size:1440px 900px; margin:0; }
+@media print{
+  html,body{ background:var(--torra); margin:0; padding:0; }
+  *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .palco,.deck{ position:static; transform:none; width:auto; height:auto; }
+  .slide{ position:relative; width:1440px; height:900px; opacity:1!important; visibility:visible!important; break-after:page; page-break-after:always; break-inside:avoid; }
+  .deck > section.slide:last-of-type{ break-after:auto; page-break-after:auto; }
+  .progresso,.contador,.painel-notas,aside.notas{ display:none!important; }
+  .s-num{ visibility:visible; }
+  *,*::before,*::after{ transition:none!important; animation:none!important; }
+}
+</style>
+</head>
+<body>
+<div class="palco" id="palco">
+<main class="deck" id="deck" data-tom="escuro" aria-roledescription="apresentação" aria-label="Apresentação da Minas Cabelos">
+  <div class="progresso" aria-hidden="true"><span></span></div>
+
+  <!-- ===================== 1 · CAPA CAFÉ (treinamento, palestra, evento) ===================== -->
+  <section class="slide capa campo-cafe ativo" id="slide-1" data-tom="escuro" aria-roledescription="slide" aria-label="1 de 10: Como escolher o mega hair certo">
+    <div class="s-folio"><span><b>Minas Cabelos</b> · Treinamento da equipe</span><span>[mês de aaaa]</span></div>
+    <div class="s-corpo">
+      <div class="capa-texto">
+        <img class="s-marca" src="assets/minas-cabelos-completa-branca.svg" alt="Minas Cabelos" width="1120" height="400">
+        <p class="s-rotulo">Atendimento · Mega hair</p>
+        <h1 class="s-display">Como escolher o mega hair <em>certo</em></h1>
+        <p class="s-apoio">Textura, tom, comprimento, peso e aplicação: as cinco perguntas que fazemos antes de indicar qualquer cabelo.</p>
+        <dl class="s-meta">
+          <div><dt>Para</dt><dd>Equipe da loja</dd></div>
+          <div><dt>Data</dt><dd>[dd/mm/aaaa]</dd></div>
+          <div><dt>Local</dt><dd>Três Corações (MG)</dd></div>
+        </dl>
+      </div>
+      <figure class="capa-foto">
+        <div class="quadro"><img src="assets/fotos/minas-peruca-humana-renata.png" alt="Peruca de cabelo humano liso e longo, castanho-escuro, no manequim da loja" width="500" height="500"></div>
+        <figcaption class="s-legenda"><b>Na foto</b>Peruca humana Renata, do catálogo</figcaption>
+      </figure>
+    </div>
+    <div class="s-rodape"><span class="s-num">01</span></div>
+    <aside class="notas">
+      <p>Capa café: para treinamento, palestra, evento e qualquer apresentação que abre a conversa. A capa clara (slide 2) serve para lançamento e para o material que vai para a cliente.</p>
+      <p>A marca branca com ouro é o único elemento dourado forte deste slide. O título tem uma palavra à mão só ("certo"). Troque o mês no fólio e os dados de data e local.</p>
+      <p>A foto é sempre real: produto do catálogo no manequim ou cliente que autorizou por escrito. Nunca banco de imagem nem pessoa gerada por IA.</p>
+    </aside>
+  </section>
+
+  <!-- ===================== 2 · CAPA CLARA (lançamento, material para a cliente) ===================== -->
+  <section class="slide capa-clara campo-leite" id="slide-2" data-tom="claro" aria-roledescription="slide" aria-label="2 de 10: Lançamento da linha de perucas orgânicas">
+    <div class="s-folio"><span><b>Minas Cabelos</b> · Lançamento</span><span>Coleção [aaaa]</span></div>
+    <div class="s-corpo">
+      <div class="capa-texto">
+        <img class="s-marca" src="assets/minas-cabelos-completa-cafe.svg" alt="Minas Cabelos" width="1120" height="400">
+        <p class="s-rotulo">Nova linha · Perucas orgânicas</p>
+        <h1 class="s-display">Leveza para usar todo <em>dia</em></h1>
+        <p class="s-apoio">Perucas de cabelo orgânico (fibra que imita o fio humano), em comprimentos curtos e médios, prontas para usar.</p>
+        <p><span class="pilula">Cabelo orgânico · fibra</span></p>
+      </div>
+      <figure class="capa-foto">
+        <div class="quadro"><img src="assets/fotos/minas-peruca-organica-bete.png" alt="Peruca orgânica cacheada, vermelho-vinho com raiz escura, no manequim" width="500" height="500"></div>
+        <figcaption class="s-legenda"><b>Na foto</b>Peruca orgânica Bete</figcaption>
+      </figure>
+    </div>
+    <div class="s-rodape"><span class="s-num">02</span><img class="s-simbolo" src="assets/minas-cabelos-simbolo-cafe.svg" alt="" width="600" height="600"></div>
+    <aside class="notas">
+      <p>Capa clara: lançamento de linha, apresentação para parceiras e material que segue para a cliente. No claro, a marca é a versão café, e a palavra à mão fica em vinho.</p>
+      <p>A pílula diz o material sem rodeio: cabelo orgânico é fibra, nunca "cabelo humano" (lei 4 da casa).</p>
+    </aside>
+  </section>
+
+  <!-- ===================== 3 · SEÇÃO ===================== -->
+  <section class="slide secao campo-vinho" id="slide-3" data-tom="escuro" aria-roledescription="slide" aria-label="3 de 10: Primeira pergunta, a textura">
+    <div class="s-folio"><span><b>Minas Cabelos</b> · Treinamento</span><span>Parte 1 de 5</span></div>
+    <div class="s-corpo">
+      <span class="secao-num" aria-hidden="true">01</span>
+      <h2 class="secao-titulo">Primeiro, a <em>textura</em></h2>
+      <div class="mecha" data-mcforms='{"forma":"mecha","campo":"vinho"}'></div>
+    </div>
+    <div class="s-rodape"><span class="s-num">03</span><img class="s-simbolo" src="assets/minas-cabelos-simbolo-branco-ouro.svg" alt="" width="600" height="600"></div>
+    <aside class="notas">
+      <p>Abertura de parte. Use Vinho ou Café, alternando entre as partes. O numeral é grande e dourado; o título tem uma palavra à mão.</p>
+      <p>A mecha entra aqui como a única forma do slide. Não acrescente foto nem ícone.</p>
+    </aside>
+  </section>
+
+  <!-- ===================== 4 · IDEIA ===================== -->
+  <section class="slide ideia campo-creme" id="slide-4" data-tom="claro" aria-roledescription="slide" aria-label="4 de 10: A cliente compra a cor que vê">
+    <div class="s-folio"><span><b>Minas Cabelos</b> · Treinamento</span><span>Lei 3 da casa</span></div>
+    <div class="s-corpo">
+      <p class="s-rotulo">Uma ideia só</p>
+      <p class="s-frase">A cliente compra a cor que <em>vê</em>.</p>
+      <p class="s-apoio">Por isso a foto do produto é feita em luz natural, sem filtro, com a referência de tom ao lado. Se a cor na tela é diferente da cor na mão, a confiança vai embora junto.</p>
+    </div>
+    <div class="s-rodape"><span class="s-num">04</span><img class="s-simbolo" src="assets/minas-cabelos-simbolo-cafe.svg" alt="" width="600" height="600"></div>
+    <aside class="notas">
+      <p>Slide de uma frase só. No máximo 12 palavras no título, uma palavra à mão, um parágrafo de apoio.</p>
+    </aside>
+  </section>
+
+  <!-- ===================== 5 · NÚMERO EM DESTAQUE ===================== -->
+  <section class="slide stat campo-cafe" id="slide-5" data-tom="escuro" aria-roledescription="slide" aria-label="5 de 10: Sete dias para desistir da compra feita fora da loja">
+    <div class="s-folio"><span><b>Minas Cabelos</b> · Treinamento</span><span>Venda pelo WhatsApp e pelo site</span></div>
+    <div class="s-corpo">
+      <p class="stat-num">7<small>dias</small></p>
+      <div class="stat-texto">
+        <p class="s-rotulo">Direito de arrependimento</p>
+        <p class="stat-conclusao">Quem compra fora da loja pode <em>desistir</em> em até sete dias</p>
+        <p class="s-apoio">Vale para a compra pelo WhatsApp, pelo site e por telefone, contados do recebimento. Explique a troca antes de fechar o pedido.</p>
+        <p class="s-fonte">Fonte: Código de Defesa do Consumidor (Lei 8.078/1990), art. 49.</p>
+      </div>
+    </div>
+    <div class="s-rodape"><span class="s-num">05</span><img class="s-simbolo" src="assets/minas-cabelos-simbolo-ouro.svg" alt="" width="600" height="600"></div>
+    <aside class="notas">
+      <p>Um número só por slide, com a conclusão em frase e a fonte embaixo. Nunca use faturamento, número de clientes ou vendas em slide que sai da equipe.</p>
+      <p>A política de troca por tipo de produto (higiene, peça cortada, peça sob medida) é a pendência 5: explique o que a lei garante e combine o resto por escrito.</p>
+    </aside>
+  </section>
+
+  <!-- ===================== 6 · GRÁFICO ===================== -->
+  <section class="slide grafico campo-leite" id="slide-6" data-tom="claro" aria-roledescription="slide" aria-label="6 de 10: Quanto mais comprimento, mais gramas para o mesmo volume">
+    <div class="s-folio"><span><b>Minas Cabelos</b> · Treinamento</span><span>Parte 4 · Peso</span></div>
+    <div class="s-corpo">
+      <div>
+        <p class="s-rotulo">Comprimento e peso</p>
+        <h2 class="s-titulo mt">Mais comprimento pede mais <em>gramas</em></h2>
+        <p class="s-apoio" style="margin-top:24px">Para manter o mesmo volume, a mecha mais longa precisa de mais cabelo. Pergunte sempre o comprimento antes de falar em peso.</p>
+      </div>
+      <figure class="grafico-area">
+        <div class="grafico-svg" data-mcviz='{"tipo":"barras","rotulos":["40 cm","50 cm","60 cm","70 cm"],"valores":[100,150,200,250],"vrotulos":["100 g","150 g","200 g","250 g"],"destaque":2,"unidade":"GRAMAS","aria":"Quanto mais longo o cabelo, mais gramas para o mesmo volume"}'></div>
+        <figcaption class="s-legenda" style="margin-top:12px">Dado ilustrativo. A quantidade real depende do volume do cabelo da cliente e do método de aplicação.</figcaption>
+      </figure>
+    </div>
+    <div class="s-rodape"><span class="s-num">06</span><img class="s-simbolo" src="assets/minas-cabelos-simbolo-cafe.svg" alt="" width="600" height="600"></div>
+    <aside class="notas">
+      <p>O título do gráfico é a conclusão. Um destaque só (vinho no claro, ouro no café); o resto neutro. Sem fonte confirmada, a legenda diz "Dado ilustrativo".</p>
+      <p>Troque os valores pela tabela real da loja quando ela estiver pronta (pendência 6).</p>
+    </aside>
+  </section>
+
+  <!-- ===================== 7 · COMPARA ===================== -->
+  <section class="slide compara campo-creme" id="slide-7" data-tom="claro" aria-roledescription="slide" aria-label="7 de 10: Diga o nome certo do material">
+    <div class="s-folio"><span><b>Minas Cabelos</b> · Treinamento</span><span>Lei 4 da casa</span></div>
+    <div class="s-corpo">
+      <div>
+        <p class="s-rotulo">Como falar do produto</p>
+        <h2 class="s-titulo">O que é humano é <em>humano</em></h2>
+      </div>
+      <div class="compara-grade">
+        <div class="compara-card">
+          <p class="s-rotulo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Assim</p>
+          <p class="compara-t">"Peruca de cabelo orgânico, 45 cm, cacheada."</p>
+          <p>Diz o material (orgânico é fibra), o comprimento em centímetros e a textura. A cliente sabe exatamente o que está levando.</p>
+        </div>
+        <div class="compara-card compara-card--nao">
+          <p class="s-rotulo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>Não assim</p>
+          <p class="compara-t">"Peruca natural premium, igualzinha ao cabelo de verdade."</p>
+          <p>"Natural" e "de verdade" fazem a fibra parecer cabelo humano. É publicidade enganosa (Código de Defesa do Consumidor, art. 37) e quebra a confiança.</p>
+        </div>
+      </div>
+    </div>
+    <div class="s-rodape"><span class="s-num">07</span><img class="s-simbolo" src="assets/minas-cabelos-simbolo-cafe.svg" alt="" width="600" height="600"></div>
+    <aside class="notas">
+      <p>Compara serve para Assim e Não assim, ou para dois produtos lado a lado (sem pessoa). Nunca antes e depois de cliente sem autorização por escrito.</p>
+    </aside>
+  </section>
+
+  <!-- ===================== 8 · CITAÇÃO ===================== -->
+  <section class="slide citacao campo-cafe" id="slide-8" data-tom="escuro" aria-roledescription="slide" aria-label="8 de 10: Beleza que gera confiança">
+    <div class="s-folio"><span><b>Minas Cabelos</b> · Treinamento</span><span>A frase da casa</span></div>
+    <div class="s-corpo">
+      <div class="mecha" data-mcforms='{"forma":"mecha","campo":"cafe"}'></div>
+      <figure>
+        <blockquote><p>Beleza que gera <em>confiança</em>.</p></blockquote>
+        <figcaption style="margin-top:28px"><b>Minas Cabelos</b>Frase da loja, publicada no Instagram em julho de 2026</figcaption>
+      </figure>
+    </div>
+    <div class="s-rodape"><span class="s-num">08</span><img class="s-simbolo" src="assets/minas-cabelos-simbolo-ouro.svg" alt="" width="600" height="600"></div>
+    <aside class="notas">
+      <p>Citação só com frase real e fonte: da loja, de quem fala no evento ou de cliente que autorizou por escrito, com o nome autorizado. Nunca invente depoimento.</p>
+    </aside>
+  </section>
+
+  <!-- ===================== 9 · PASSOS ===================== -->
+  <section class="slide passos campo-leite" id="slide-9" data-tom="claro" aria-roledescription="slide" aria-label="9 de 10: Quatro perguntas antes de indicar o cabelo">
+    <div class="s-folio"><span><b>Minas Cabelos</b> · Treinamento</span><span>Atendimento pelo WhatsApp</span></div>
+    <div class="s-corpo">
+      <div>
+        <p class="s-rotulo">O roteiro do atendimento</p>
+        <h2 class="s-titulo">Quatro perguntas antes de <em>indicar</em></h2>
+      </div>
+      <ol class="etapas">
+        <li class="etapa"><span class="etapa-n">1</span><p class="etapa-t">Textura</p><p>Liso, ondulado, cacheado ou crespo. Peça uma foto do cabelo dela em luz natural.</p></li>
+        <li class="etapa"><span class="etapa-n">2</span><p class="etapa-t">Tom</p><p>Compare com a cartela da loja. Na dúvida, envie a foto da mecha ao lado de uma folha branca.</p></li>
+        <li class="etapa"><span class="etapa-n">3</span><p class="etapa-t">Comprimento e volume</p><p>Quantos centímetros e quanto volume ela quer. Daí sai o peso em gramas.</p></li>
+        <li class="etapa"><span class="etapa-n">4</span><p class="etapa-t">Aplicação</p><p>Queratina, fita adesiva, tic tac ou peruca. Explique a manutenção antes do preço.</p></li>
+      </ol>
+    </div>
+    <div class="s-rodape"><span class="s-num">09</span><img class="s-simbolo" src="assets/minas-cabelos-simbolo-cafe.svg" alt="" width="600" height="600"></div>
+    <aside class="notas">
+      <p>Passos: de três a quatro etapas por slide, cada uma com título curto e uma frase. O numeral é a cor de destaque do campo.</p>
+    </aside>
+  </section>
+
+  <!-- ===================== 10 · CLOSER ===================== -->
+  <section class="slide closer campo-cafe" id="slide-10" data-tom="escuro" aria-roledescription="slide" aria-label="10 de 10: Canais oficiais da Minas Cabelos">
+    <div class="s-folio"><span><b>Minas Cabelos</b></span><span>Obrigado</span></div>
+    <div class="s-corpo">
+      <div class="capa-texto">
+        <img class="s-marca" src="assets/minas-cabelos-completa-branca.svg" alt="Minas Cabelos" width="1120" height="400">
+        <h2 class="s-titulo">Até a próxima <em>visita</em></h2>
+        <p class="s-apoio">Loja em Três Corações (MG) e atendimento pelo WhatsApp, com envio para todo o Brasil.</p>
+      </div>
+      <div>
+        <div class="canais">
+          <div class="canal"><span class="ic-bola"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span><div><b>(35) 99244-3366</b><small>WhatsApp [confirmar]</small></div></div>
+          <div class="canal"><span class="ic-bola"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></span><div><b>@minascabelos</b><small>Instagram</small></div></div>
+          <div class="canal"><span class="ic-bola"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></span><div><b>minascabelos.com.br</b><small>Loja virtual</small></div></div>
+          <div class="canal"><span class="ic-bola"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></span><div><b>Centro de Três Corações (MG)</b><small>Endereço completo [confirmar]</small></div></div>
+        </div>
+        <p class="closer-id" style="margin-top:28px">[Razão social] · CNPJ [confirmar] · Horário de atendimento [confirmar]</p>
+      </div>
+    </div>
+    <div class="s-rodape"><span class="s-num">10</span></div>
+    <aside class="notas">
+      <p>Fechamento com os canais oficiais. Os dados marcados com [confirmar] dependem das pendências 3 e 4 do brand book: não publique antes de confirmar.</p>
+      <p>Para a equipe, troque o título por "Dúvidas?" e mantenha os canais.</p>
+    </aside>
+  </section>
+
+  <p class="contador" aria-hidden="true"><b id="c-atual">01</b><span>/</span><span id="c-total">10</span></p>
+</main>
+</div>
+
+<aside class="painel-notas" aria-label="Notas do apresentador">
+  <h2>Notas do apresentador</h2>
+  <p class="painel-num" id="p-num">01</p>
+  <p class="painel-tit" id="p-tit"></p>
+  <div class="painel-txt" id="p-txt"></div>
+  <p class="painel-prox" id="p-prox"></p>
+  <p class="painel-teclas"><kbd>←</kbd> <kbd>→</kbd> navegar · <kbd>P</kbd> notas · <kbd>F</kbd> tela cheia · <kbd>Home</kbd> <kbd>End</kbd></p>
+</aside>
+
+<script src="mcviz.js"></script>
+<script src="mcforms.js"></script>
+<script>
+/* =====================================================================
+   NAVEGAÇÃO DO DECK · Cartela Mineira v1
+   Setas, espaço, PageUp/PageDown, Home/End, clique (terço esquerdo volta),
+   toque (deslize), P (notas), F (tela cheia), #3 (abre o slide 3).
+   No celular os slides empilham e a página rola.
+   ===================================================================== */
+(function(){
+  try {
+  var raiz = document.documentElement;
+  var deck = document.getElementById('deck');
+  var slides = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+  var total = slides.length, atual = 0;
+  var barra = deck.querySelector('.progresso span');
+  var cAtual = document.getElementById('c-atual');
+  var pNum = document.getElementById('p-num'), pTit = document.getElementById('p-tit');
+  var pTxt = document.getElementById('p-txt'), pProx = document.getElementById('p-prox');
+  var dois = function(n){ return (n < 10 ? '0' : '') + n; };
+  document.getElementById('c-total').textContent = dois(total);
+  var celular = function(){ return window.matchMedia('(max-width:640px), (max-height:500px)').matches; };
+  var tituloDe = function(s){ return (s.getAttribute('aria-label') || '').replace(/^\d+ de \d+:\s*/, ''); };
+
+  function escalar(){
+    var palco = document.getElementById('palco');
+    var w = palco.clientWidth, h = palco.clientHeight;
+    if (!w || !h) return;
+    deck.style.setProperty('--k', Math.min(w / 1440, h / 900).toFixed(4));
+  }
+  function mostrar(n, semHash){
+    atual = Math.max(0, Math.min(total - 1, n));
+    slides.forEach(function(s, i){
+      var ativo = i === atual;
+      s.classList.toggle('ativo', ativo);
+      if (!celular() && !ativo) s.setAttribute('aria-hidden', 'true'); else s.removeAttribute('aria-hidden');
+    });
+    var s = slides[atual];
+    deck.setAttribute('data-tom', s.getAttribute('data-tom') || 'escuro');
+    if (barra) barra.style.setProperty('--p', ((atual + 1) / total).toFixed(4));
+    cAtual.textContent = dois(atual + 1);
+    pNum.innerHTML = dois(atual + 1) + '<span> / ' + dois(total) + '</span>';
+    pTit.textContent = tituloDe(s);
+    var nota = s.querySelector('aside.notas');
+    pTxt.innerHTML = nota ? nota.innerHTML : '<p>Sem notas para este slide.</p>';
+    pProx.innerHTML = atual < total - 1 ? '<b>Próximo:</b> ' + tituloDe(slides[atual + 1]) : '<b>Fim da apresentação.</b>';
+    if (!semHash) { try { history.replaceState(null, '', '#' + (atual + 1)); } catch (e) {} }
+  }
+  var lerHash = function(){ var h = (location.hash || '').replace('#', ''); return /^\d+$/.test(h) ? parseInt(h, 10) - 1 : null; };
+
+  document.addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var alvo = e.target && e.target.tagName;
+    if (alvo === 'INPUT' || alvo === 'TEXTAREA' || alvo === 'SELECT') return;
+    var k = e.key;
+    if (k === 'p' || k === 'P') { raiz.classList.toggle('com-notas'); escalar(); return; }
+    if (k === 'f' || k === 'F') {
+      try {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else if (raiz.requestFullscreen) { var r = raiz.requestFullscreen(); if (r && r.catch) r.catch(function(){}); }
+      } catch (err) {}
+      return;
+    }
+    if (celular()) return;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || (k === ' ' && !e.shiftKey)) { e.preventDefault(); mostrar(atual + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp' || (k === ' ' && e.shiftKey)) { e.preventDefault(); mostrar(atual - 1); }
+    else if (k === 'Home') { e.preventDefault(); mostrar(0); }
+    else if (k === 'End') { e.preventDefault(); mostrar(total - 1); }
+  });
+  document.getElementById('palco').addEventListener('click', function(e){
+    if (celular() || e.target.closest('a,button')) return;
+    mostrar(atual + (e.clientX < window.innerWidth / 3 ? -1 : 1));
+  });
+  var x0 = null, y0 = null;
+  document.addEventListener('touchstart', function(e){ if (e.touches.length === 1) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; } }, { passive:true });
+  document.addEventListener('touchend', function(e){
+    if (x0 === null || celular()) { x0 = null; return; }
+    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) mostrar(atual + (dx < 0 ? 1 : -1));
+    x0 = null;
+  }, { passive:true });
+  window.addEventListener('hashchange', function(){ var n = lerHash(); if (n !== null) mostrar(n, n >= 0 && n < total); });
+
+  /* GRÁFICOS (mcviz.js): no palco o desenho é feito mais estreito e ampliado 1,5 vez,
+     para os rótulos lerem a distância. No celular o motor usa a largura real. */
+  var AMPLIA = 1.5;
+  var graficos = Array.prototype.slice.call(deck.querySelectorAll('[data-mcviz]'));
+  graficos.forEach(function(el){ try { el.__base = JSON.parse(el.getAttribute('data-mcviz')); } catch (err) { el.__base = null; } });
+  function cfgPara(el){
+    var c = Object.assign({}, el.__base);
+    if (!celular()) { var w = el.clientWidth || 760; c.largura = Math.round(w / AMPLIA); }
+    return c;
+  }
+  graficos.forEach(function(el){ if (el.__base) el.setAttribute('data-mcviz', JSON.stringify(cfgPara(el))); });
+  function refazGraficos(){
+    if (!window.mcviz) return;
+    graficos.forEach(function(el){ if (el.__base) window.mcviz.render(el, el.__base.tipo, cfgPara(el)); });
+  }
+
+  var modo = celular() ? 'celular' : 'palco';
+  function ajustar(){
+    escalar();
+    var m = celular() ? 'celular' : 'palco';
+    if (m !== modo) { modo = m; refazGraficos(); mostrar(atual, true); }
+  }
+  var inicial = lerHash();
+  mostrar(inicial === null ? 0 : inicial, inicial === null || (inicial >= 0 && inicial < total));
+  escalar();
+  if (inicial !== null && celular() && slides[atual]) { try { slides[atual].scrollIntoView(); } catch (err) {} }
+  var espera = 0;
+  window.addEventListener('resize', function(){ clearTimeout(espera); espera = setTimeout(ajustar, 80); });
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(function(){ clearTimeout(espera); espera = setTimeout(ajustar, 80); }).observe(document.getElementById('palco'));
+  } catch (e) { console.error('deck', e); }
+})();
+</script>
+</body>
+</html>
